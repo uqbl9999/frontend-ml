@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+  departmentHeatmap,
+  descriptiveStats,
+  screeningGroupDistribution,
+  screeningGroupTotals,
+  screeningTypeHeatmap,
+} from "../data/mock-charts";
+
 type ExploratoryInsight = {
   readonly id: string;
   readonly title: string;
@@ -36,11 +44,34 @@ const MOCK_INSIGHTS: ExploratoryInsight[] = [
 
 export function useExploratoryData() {
   const [insights, setInsights] = useState<ExploratoryInsight[]>([]);
+  const [groupDistribution, setGroupDistribution] = useState<
+    typeof screeningGroupDistribution
+  >([]);
+  const [groupTotals, setGroupTotals] = useState<
+    typeof screeningGroupTotals
+  >([]);
+  const [typeHeatmap, setTypeHeatmap] = useState<typeof screeningTypeHeatmap>(
+    [],
+  );
+  const [deptHeatmap, setDeptHeatmap] = useState<typeof departmentHeatmap>([]);
+  const [stats, setStats] = useState<typeof descriptiveStats>([]);
 
   useEffect(() => {
     // TODO: Replace with API call fetching exploratory charts and KPIs.
     setInsights(MOCK_INSIGHTS);
+    setGroupDistribution(screeningGroupDistribution);
+    setGroupTotals(screeningGroupTotals);
+    setTypeHeatmap(screeningTypeHeatmap);
+    setDeptHeatmap(departmentHeatmap);
+    setStats(descriptiveStats);
   }, []);
 
-  return { insights };
+  return {
+    insights,
+    groupDistribution,
+    groupTotals,
+    typeHeatmap,
+    deptHeatmap,
+    stats,
+  };
 }
