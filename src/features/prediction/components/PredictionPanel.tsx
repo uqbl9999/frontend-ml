@@ -126,8 +126,7 @@ export function PredictionPanel() {
                   Motor Analítico
                 </span>
                 <p className="text-sm text-indigo-700 dark:text-indigo-200">
-                  Modelo entrenado con datos 2018-2024 · Última actualización hace
-                  3 días.
+                  Modelo entrenado con datos del 2017
                 </p>
               </div>
               <Button type="submit" className="gap-2 px-6">

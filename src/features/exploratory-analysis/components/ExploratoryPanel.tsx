@@ -26,7 +26,7 @@ export function ExploratoryPanel() {
 
   return (
     <div className="space-y-6">
-      <Card className="border-slate-200/80 bg-slate-50/60 shadow-lg dark:border-slate-800/60 dark:bg-slate-900/60">
+      {/* <Card className="border-slate-200/80 bg-slate-50/60 shadow-lg dark:border-slate-800/60 dark:bg-slate-900/60">
         <CardHeader className="gap-3">
           <Badge variant="default" className="w-fit">
             <TrendingUp className="h-4 w-4" />
@@ -62,7 +62,7 @@ export function ExploratoryPanel() {
             </div>
           ))}
         </CardContent>
-      </Card>
+      </Card> */}
 
       <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
         <CardHeader className="gap-3">
