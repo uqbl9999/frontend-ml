@@ -1,4 +1,4 @@
-import { Gauge, Sparkles } from "lucide-react";
+import { BrainCog, CheckCircle2, Gauge, Info } from "lucide-react";
 
 import { Badge } from "../../../components/ui/badge";
 import {
@@ -9,10 +9,11 @@ import {
   CardTitle,
 } from "../../../components/ui/card";
 import { Separator } from "../../../components/ui/separator";
+import { FeatureImportanceChart } from "./FeatureImportanceChart";
 import { useMetricsData } from "../hooks/useMetricsData";
 
 export function MetricsPanel() {
-  const { metrics } = useMetricsData();
+  const { metrics, featureImportance, interpretation } = useMetricsData();
 
   return (
     <div className="space-y-6">
@@ -42,39 +43,69 @@ export function MetricsPanel() {
               <Badge variant="outline" className="w-fit text-xs">
                 {metric.label}
               </Badge>
-              <CardTitle className="text-3xl font-semibold">
-                {metric.value}
+              <CardTitle className="text-3xl font-semibold text-indigo-600 dark:text-indigo-300">
+                {metric.format ? metric.format(metric.value) : metric.value}
               </CardTitle>
               <CardDescription>{metric.description}</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
               <div className="rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-400">
-                Evolución estable en los últimos 90 días · Variación &lt; 2%.
+                Clasificación:{" "}
+                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                  {metric.quality}
+                </span>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card className="border-indigo-200 bg-gradient-to-r from-indigo-500/10 via-indigo-500/5 to-transparent shadow-md dark:border-indigo-500/40 dark:from-indigo-500/10 dark:via-slate-900 dark:to-slate-900">
-        <CardHeader className="flex flex-col items-start gap-3 pb-3">
+      <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+        <CardHeader className="flex flex-col gap-3">
+          <Badge variant="secondary" className="w-fit">
+            <BrainCog className="h-4 w-4" />
+            Importancia de características
+          </Badge>
+          <CardDescription>
+            Peso relativo de las variables dentro del modelo Random Forest.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+          <FeatureImportanceChart data={featureImportance} />
+        </CardContent>
+      </Card>
+
+      <Card className="border-indigo-200 bg-gradient-to-br from-indigo-500/10 via-indigo-500/5 to-transparent shadow-md dark:border-indigo-500/40 dark:from-indigo-500/10 dark:via-slate-900 dark:to-slate-900">
+        <CardHeader className="gap-3">
           <Badge
             variant="default"
             className="bg-indigo-600 text-white dark:bg-indigo-500"
           >
-            <Sparkles className="h-4 w-4" />
-            Oportunidades de mejora
+            <CheckCircle2 className="h-4 w-4" />
+            Interpretación de resultados
           </Badge>
           <CardDescription className="text-sm text-slate-600 dark:text-slate-300">
-            Considera incrementar la cobertura de datos rurales y evaluar
-            modelos híbridos con componentes de explainable AI para justificar
-            las decisiones.
+            Conclusiones clave sobre el rendimiento del modelo y su capacidad de
+            generalización.
           </CardDescription>
         </CardHeader>
         <Separator className="mx-6" />
-        <CardContent className="pt-4 text-xs text-slate-500 dark:text-slate-400">
-          Próxima evaluación programada: 15 de marzo · Dataset de validación
-          2024-Q4 en proceso de limpieza.
+        <CardContent className="space-y-3 pt-4 text-sm text-slate-700 dark:text-slate-200">
+          {interpretation.map((item) => (
+            <p
+              key={item.title}
+              className={[
+                "leading-relaxed",
+                item.highlight ? "font-semibold text-emerald-600 dark:text-emerald-300" : "",
+              ].join(" ")}
+            >
+              <span className="inline-flex items-center gap-2 font-semibold text-indigo-600 dark:text-indigo-300">
+                <Info className="h-4 w-4" />
+                {item.title}:
+              </span>{" "}
+              {item.content}
+            </p>
+          ))}
         </CardContent>
       </Card>
     </div>
