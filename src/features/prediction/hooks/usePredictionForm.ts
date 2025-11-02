@@ -1,4 +1,13 @@
 import { FormEvent, useCallback, useMemo, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Route,
+  Scan,
+  Users,
+  Venus,
+} from "lucide-react";
 
 import { predictionFieldOptions } from "../data/options";
 
@@ -16,16 +25,38 @@ const optionBlueprint = [
     id: "department",
     label: "Departamento",
     options: predictionFieldOptions.department,
+    icon: MapPin,
   },
-  { id: "province", label: "Provincia", options: predictionFieldOptions.province },
-  { id: "lifeStage", label: "Etapa de Vida", options: predictionFieldOptions.lifeStage },
+  {
+    id: "province",
+    label: "Provincia",
+    options: predictionFieldOptions.province,
+    icon: Route,
+  },
+  {
+    id: "lifeStage",
+    label: "Etapa de Vida",
+    options: predictionFieldOptions.lifeStage,
+    icon: Users,
+  },
   {
     id: "screeningType",
     label: "Tipo de Tamizaje",
     options: predictionFieldOptions.screeningType,
+    icon: Scan,
   },
-  { id: "sex", label: "Sexo", options: predictionFieldOptions.sex },
-  { id: "month", label: "Mes a Predecir", options: predictionFieldOptions.month },
+  {
+    id: "sex",
+    label: "Sexo",
+    options: predictionFieldOptions.sex,
+    icon: Venus,
+  },
+  {
+    id: "month",
+    label: "Mes a Predecir",
+    options: predictionFieldOptions.month,
+    icon: Calendar,
+  },
 ] as const;
 
 type Option = (typeof optionBlueprint)[number]["options"][number];
@@ -36,6 +67,7 @@ type Field = {
   readonly options: readonly Option[];
   readonly value: string;
   readonly onChange: (value: string) => void;
+  readonly icon: LucideIcon;
 };
 
 export function usePredictionForm() {
@@ -55,6 +87,7 @@ export function usePredictionForm() {
         label: entry.label,
         options: entry.options,
         value: formState[entry.id],
+        icon: entry.icon,
         onChange: (value: string) =>
           setFormState((state) => ({
             ...state,

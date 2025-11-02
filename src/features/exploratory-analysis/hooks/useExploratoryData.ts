@@ -20,6 +20,18 @@ const MOCK_INSIGHTS: ExploratoryInsight[] = [
     value: "Adolescentes",
     change: "grupo de riesgo 2024",
   },
+  {
+    id: "department-leader",
+    title: "Departamento con mayor variación",
+    value: "Cusco",
+    change: "Incremento de 6.2 pp",
+  },
+  {
+    id: "screening-focus",
+    title: "Tamizaje prioritario",
+    value: "Violencia Familiar",
+    change: "Mayor tasa de positividad",
+  },
 ];
 
 export function useExploratoryData() {
