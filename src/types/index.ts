@@ -1,0 +1,6 @@
+export type TabId = "prediction" | "exploratory" | "metrics";
+
+export type SelectOption = {
+  readonly label: string;
+  readonly value: string;
+};
