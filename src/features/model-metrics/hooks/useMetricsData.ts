@@ -94,9 +94,9 @@ const INTERPRETATION = [
 export function useMetricsData() {
   const [metrics, setMetrics] = useState<ModelMetric[]>([]);
   const [featureImportance, setFeatureImportance] =
-    useState<typeof FEATURE_IMPORTANCE>([]);
+    useState(FEATURE_IMPORTANCE);
   const [interpretation, setInterpretation] =
-    useState<typeof INTERPRETATION>([]);
+    useState(INTERPRETATION);
 
   useEffect(() => {
     // TODO: Reemplazar con la petición real al servicio de métricas.

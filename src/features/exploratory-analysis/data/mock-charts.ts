@@ -57,7 +57,7 @@ export const screeningTypeHeatmap = [
       { type: "Consumo de Tabaco", casos: 164 },
     ],
   },
-] as const;
+];
 
 export const departmentHeatmap = [
   {
@@ -120,7 +120,7 @@ export const departmentHeatmap = [
       { department: "Arequipa", casos: 655 },
     ],
   },
-] as const;
+];
 
 export const descriptiveStats = [
   { label: "Media", value: 22.4, color: "text-indigo-500" },

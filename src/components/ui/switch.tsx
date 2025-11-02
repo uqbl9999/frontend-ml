@@ -1,4 +1,5 @@
-import { ComponentPropsWithoutRef, forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 import { cn } from "../../lib/utils";
 

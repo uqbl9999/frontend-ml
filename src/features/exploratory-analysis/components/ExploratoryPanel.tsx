@@ -1,4 +1,4 @@
-import { BarChart3, Flame, TrendingUp } from "lucide-react";
+import { Flame } from "lucide-react";
 
 import { Badge } from "../../../components/ui/badge";
 import {
@@ -6,7 +6,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "../../../components/ui/card";
 import { Separator } from "../../../components/ui/separator";
 import { DescriptiveStats } from "./DescriptiveStats";
@@ -16,7 +15,6 @@ import { useExploratoryData } from "../hooks/useExploratoryData";
 
 export function ExploratoryPanel() {
   const {
-    insights,
     groupDistribution,
     groupTotals,
     typeHeatmap,

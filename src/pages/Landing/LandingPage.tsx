@@ -33,8 +33,7 @@ const TABS = [
 ] as const;
 
 export function LandingPage() {
-  const [activeTab, setActiveTab] =
-    useState<(typeof TABS)[number]["id"]>("prediction");
+  const [activeTab, setActiveTab] = useState<string>("prediction");
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>

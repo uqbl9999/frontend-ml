@@ -96,7 +96,7 @@ export function MetricsPanel() {
               key={item.title}
               className={[
                 "leading-relaxed",
-                item.highlight ? "font-semibold text-emerald-600 dark:text-emerald-300" : "",
+                "highlight" in item && item.highlight ? "font-semibold text-emerald-600 dark:text-emerald-300" : "",
               ].join(" ")}
             >
               <span className="inline-flex items-center gap-2 font-semibold text-indigo-600 dark:text-indigo-300">

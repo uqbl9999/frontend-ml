@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-type HeatmapMatrixProps<T extends { casos: number }> = {
+type HeatmapMatrixProps<T extends { readonly casos: number }> = {
   readonly data: ReadonlyArray<{
     readonly group: string;
     readonly values: ReadonlyArray<T>;
@@ -11,7 +11,7 @@ type HeatmapMatrixProps<T extends { casos: number }> = {
   readonly valueFormatter?: (value: number) => string;
 };
 
-export function HeatmapMatrix<T extends { casos: number }>({
+export function HeatmapMatrix<T extends { readonly casos: number }>({
   data,
   axisKey,
   title,

@@ -44,17 +44,11 @@ const MOCK_INSIGHTS: ExploratoryInsight[] = [
 
 export function useExploratoryData() {
   const [insights, setInsights] = useState<ExploratoryInsight[]>([]);
-  const [groupDistribution, setGroupDistribution] = useState<
-    typeof screeningGroupDistribution
-  >([]);
-  const [groupTotals, setGroupTotals] = useState<
-    typeof screeningGroupTotals
-  >([]);
-  const [typeHeatmap, setTypeHeatmap] = useState<typeof screeningTypeHeatmap>(
-    [],
-  );
-  const [deptHeatmap, setDeptHeatmap] = useState<typeof departmentHeatmap>([]);
-  const [stats, setStats] = useState<typeof descriptiveStats>([]);
+  const [groupDistribution, setGroupDistribution] = useState(screeningGroupDistribution);
+  const [groupTotals, setGroupTotals] = useState(screeningGroupTotals);
+  const [typeHeatmap, setTypeHeatmap] = useState(screeningTypeHeatmap);
+  const [deptHeatmap, setDeptHeatmap] = useState(departmentHeatmap);
+  const [stats, setStats] = useState(descriptiveStats);
 
   useEffect(() => {
     // TODO: Replace with API call fetching exploratory charts and KPIs.

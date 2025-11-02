@@ -34,7 +34,7 @@ export function DistributionBarChart({
   return (
     <ResponsiveContainer width="100%" height={320}>
       <BarChart
-        data={data}
+        data={[...data]}
         layout="vertical"
         margin={{ top: 16, right: 24, bottom: 16, left: 16 }}
       >

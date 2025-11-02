@@ -1,9 +1,11 @@
 import {
-  ComponentPropsWithoutRef,
-  Context,
   createContext,
   forwardRef,
   useContext,
+} from "react";
+import type {
+  ComponentPropsWithoutRef,
+  Context,
 } from "react";
 
 import { cn } from "../../lib/utils";

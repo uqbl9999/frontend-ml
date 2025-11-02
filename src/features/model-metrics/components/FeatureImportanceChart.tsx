@@ -22,7 +22,7 @@ export function FeatureImportanceChart({ data }: FeatureImportanceChartProps) {
   return (
     <ResponsiveContainer width="100%" height={360}>
       <BarChart
-        data={data}
+        data={[...data]}
         layout="vertical"
         margin={{ top: 16, right: 24, bottom: 16, left: 16 }}
       >

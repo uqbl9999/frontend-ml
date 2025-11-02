@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 
 import type { Theme } from "./theme-context";
 import { ThemeContext } from "./theme-context";
@@ -42,7 +43,7 @@ export function UIProvider({ children }: UIProviderProps) {
   const value = useMemo(
     () => ({
       theme,
-      setTheme: (nextTheme) => setThemeState(nextTheme),
+      setTheme: (nextTheme: Theme) => setThemeState(nextTheme),
       toggleTheme: () =>
         setThemeState((current) => (current === "light" ? "dark" : "light")),
     }),
