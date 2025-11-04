@@ -21,7 +21,14 @@ export const api = {
   getDepartamentos: () => fetchJSON<string[]>("/metadata/departamentos"),
   getTamizajes: () => fetchJSON<string[]>("/metadata/tamizajes"),
   getEtapas: () => fetchJSON<string[]>("/metadata/etapas"),
-  getProvincias: (dept: string) => fetchJSON<string[]>(`/metadata/provincias/${encodeURIComponent(dept)}`),
+  // The backend returns: { departamento: string, provincias: string[] }
+  // Normalize to string[] for consumer hooks/components.
+  getProvincias: async (dept: string) => {
+    const data = await fetchJSON<{ departamento?: string; provincias?: string[] }>(
+      `/metadata/provincias/${encodeURIComponent(dept)}`,
+    );
+    return Array.isArray(data?.provincias) ? data.provincias : [];
+  },
   getUbigeo: (dept: string, prov: string) => fetchJSON<{ ubigeo: number }>(`/metadata/ubigeo/${encodeURIComponent(dept)}/${encodeURIComponent(prov)}`),
 
   // Model endpoints

@@ -146,8 +146,8 @@ export function PredictionPanel() {
                       value={field.value}
                       onChange={(event) => field.onChange(event.target.value)}
                       disabled={
-                        field.id === "province" &&
-                        (field.options.length === 0 || field.options[0].value === "")
+                        // Habilita provincia cuando existe un departamento seleccionado
+                        field.id === "province" && !formState.department
                       }
                       className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:ring-indigo-500/40"
                     >
