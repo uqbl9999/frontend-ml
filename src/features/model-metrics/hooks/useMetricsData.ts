@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { api } from "../../../lib/api";
 
 type MetricQuality = "Excelente" | "Bueno" | "Aceptable" | "En observación";
 
@@ -95,15 +96,35 @@ export function useMetricsData() {
   const [metrics, setMetrics] = useState<ModelMetric[]>([]);
   const [featureImportance, setFeatureImportance] =
     useState(FEATURE_IMPORTANCE);
-  const [interpretation, setInterpretation] =
-    useState(INTERPRETATION);
+  const [interpretation, setInterpretation] = useState(INTERPRETATION);
+  const [modelInfo, setModelInfo] = useState<Record<string, unknown> | null>(null);
+  const [topN, setTopN] = useState<number>(5);
 
   useEffect(() => {
-    // TODO: Reemplazar con la petición real al servicio de métricas.
+    // Cargar métricas base (mock por ahora)
     setMetrics(MOCK_METRICS);
-    setFeatureImportance(FEATURE_IMPORTANCE);
     setInterpretation(INTERPRETATION);
   }, []);
 
-  return { metrics, featureImportance, interpretation };
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [features, info] = await Promise.all([
+          api.getModelFeatures(topN),
+          api.getModelInfo(),
+        ]);
+        if (cancelled) return;
+        setFeatureImportance(features);
+        setModelInfo(info);
+      } catch (error) {
+        console.error("Error cargando métricas del modelo:", error);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [topN]);
+
+  return { metrics, featureImportance, interpretation, modelInfo, topN, setTopN };
 }

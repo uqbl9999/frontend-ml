@@ -13,7 +13,7 @@ import { FeatureImportanceChart } from "./FeatureImportanceChart";
 import { useMetricsData } from "../hooks/useMetricsData";
 
 export function MetricsPanel() {
-  const { metrics, featureImportance, interpretation } = useMetricsData();
+  const { metrics, featureImportance, interpretation, modelInfo, topN, setTopN } = useMetricsData();
 
   return (
     <div className="space-y-6">
@@ -69,11 +69,55 @@ export function MetricsPanel() {
           <CardDescription>
             Peso relativo de las variables dentro del modelo Random Forest.
           </CardDescription>
+          <div className="mt-2 inline-flex items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+              Top N
+            </span>
+            <select
+              value={topN}
+              onChange={(e) => setTopN(Number(e.target.value))}
+              className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:ring-indigo-500/40"
+            >
+              {[5, 10, 15].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
         </CardHeader>
         <CardContent className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
           <FeatureImportanceChart data={featureImportance} />
         </CardContent>
       </Card>
+
+      {modelInfo ? (
+        <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+          <CardHeader className="gap-3">
+            <Badge variant="outline" className="w-fit">
+              Información del modelo
+            </Badge>
+            <CardDescription>
+              Metadatos y configuración reportados por el servicio.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {Object.entries(modelInfo).map(([key, value]) => (
+              <div
+                key={key}
+                className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/40"
+              >
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                  {key}
+                </span>
+                <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
+                  {typeof value === "object" ? JSON.stringify(value) : String(value)}
+                </p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card className="border-indigo-200 bg-gradient-to-br from-indigo-500/10 via-indigo-500/5 to-transparent shadow-md dark:border-indigo-500/40 dark:from-indigo-500/10 dark:via-slate-900 dark:to-slate-900">
         <CardHeader className="gap-3">

@@ -8,6 +8,7 @@ import {
   ShieldHalf,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { api } from "../../../lib/api";
 
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
@@ -22,50 +23,87 @@ import { Separator } from "../../../components/ui/separator";
 import { usePredictionForm } from "../hooks/usePredictionForm";
 
 type PredictionResult = {
-  readonly value: number;
-  readonly classification: "Riesgo Bajo" | "Riesgo Moderado" | "Riesgo Alto";
-  readonly summary: string;
-  readonly recommendations: string[];
-};
-
-const MOCK_RESULT: PredictionResult = {
-  value: 0.2363,
-  classification: "Riesgo Moderado",
-  summary:
-    "Basado en percentiles históricos del MINSA. Mantener vigilancia y reforzar acciones preventivas.",
-  recommendations: [
-    "Mantener programas preventivos regulares en la región.",
-    "Monitorear indicadores críticos cada dos semanas.",
-    "Activar seguimiento personalizado a población adolescente.",
-  ],
+  readonly value: number; // porcentaje directo (ej: 33.54)
+  readonly classification: string; // tomado de interpretacion (ej: "Riesgo Alto")
+  readonly summary: string; // detalle de interpretacion
+  readonly recommendations: string[]; // por ahora, sugerencias estáticas
 };
 
 export function PredictionPanel() {
-  const { fields, onSubmit } = usePredictionForm();
+  const { fields, onSubmit, formState } = usePredictionForm();
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [lastUbigeo, setLastUbigeo] = useState<number | undefined>(undefined);
 
-  const formattedAttributes = useMemo(
-    () =>
-      fields.map((field) => {
-        const selectedOption = field.options.find(
-          (option) => option.value === field.value,
-        );
+  const formattedAttributes = useMemo(() => {
+    const base = fields.map((field) => {
+      const selectedOption = field.options.find(
+        (option) => option.value === field.value,
+      );
 
-        return {
-          id: field.id,
-          label: field.label,
-          value: selectedOption?.label ?? "Sin selección",
-          Icon: field.icon,
-        };
-      }),
-    [fields],
-  );
+      return {
+        id: field.id,
+        label: field.label,
+        value: selectedOption?.label ?? "Sin selección",
+        Icon: field.icon,
+      };
+    });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (typeof lastUbigeo === "number") {
+      base.push({
+        id: "ubigeo" as const,
+        label: "Ubigeo",
+        value: String(lastUbigeo),
+        Icon: MapPin,
+      });
+    }
+    return base;
+  }, [fields, lastUbigeo]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     onSubmit(event);
-    setPrediction(MOCK_RESULT);
-    setShowDetails(false);
+
+    try {
+      // Obtener ubigeo para el par dept/prov
+      let ubigeo: number | undefined = undefined;
+      if (formState.department && formState.province) {
+        try {
+          const resp = await api.getUbigeo(formState.department, formState.province);
+          ubigeo = resp?.ubigeo;
+        } catch (e) {
+          console.warn("No se pudo obtener ubigeo:", e);
+        }
+      }
+
+      const payload = {
+        NroMes: Number(formState.month),
+        Departamento: formState.department,
+        Provincia: formState.province,
+        Sexo: formState.sex === "M" ? "M" : "F",
+        Etapa: formState.lifeStage,
+        DetalleTamizaje: formState.screeningType,
+        ubigeo,
+      } as const;
+
+      const result = await api.predict(payload);
+      const [risk, detail] = (result.interpretacion ?? "").split(" - ");
+      setLastUbigeo(ubigeo);
+      const newPrediction: PredictionResult = {
+        value: result.tasa_positividad_predicha,
+        classification: risk || "Predicción",
+        summary: detail || result.interpretacion,
+        recommendations: [
+          "Reforzar acciones preventivas y seguimiento.",
+          "Monitorear indicadores críticos semanalmente.",
+          "Coordinar intervención con equipos territoriales.",
+        ],
+      };
+      setPrediction(newPrediction);
+      setShowDetails(false);
+    } catch (error) {
+      console.error("Error al predecir:", error);
+      setPrediction(null);
+    }
   };
 
   return (
@@ -107,10 +145,18 @@ export function PredictionPanel() {
                     <select
                       value={field.value}
                       onChange={(event) => field.onChange(event.target.value)}
+                      disabled={
+                        field.id === "province" &&
+                        (field.options.length === 0 || field.options[0].value === "")
+                      }
                       className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:ring-indigo-500/40"
                     >
                       {field.options.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option
+                          key={`${field.id}-${option.value || "placeholder"}`}
+                          value={option.value}
+                          disabled={option.value === ""}
+                        >
                           {option.label}
                         </option>
                       ))}
@@ -162,7 +208,7 @@ export function PredictionPanel() {
                   Tasa de Positividad Estimada
                 </CardTitle>
                 <p className="text-5xl font-black text-indigo-700 dark:text-indigo-300">
-                  {(prediction.value * 100).toFixed(2)}%
+                  {prediction.value.toFixed(2)}%
                 </p>
               </div>
               <Badge
