@@ -26,7 +26,9 @@ type PredictionResult = {
   readonly value: number; // porcentaje directo (ej: 33.54)
   readonly classification: string; // tomado de interpretacion (ej: "Riesgo Alto")
   readonly summary: string; // detalle de interpretacion
-  readonly recommendations: string[]; // por ahora, sugerencias estáticas
+  readonly recommendations: string[]; // acciones sugeridas desde la API
+  readonly context?: string; // contexto situacional desde la API
+  readonly keyFactors?: string[]; // factores clave desde la API
 };
 
 export function PredictionPanel() {
@@ -92,11 +94,16 @@ export function PredictionPanel() {
         value: result.tasa_positividad_predicha,
         classification: risk || "Predicción",
         summary: detail || result.interpretacion,
-        recommendations: [
-          "Reforzar acciones preventivas y seguimiento.",
-          "Monitorear indicadores críticos semanalmente.",
-          "Coordinar intervención con equipos territoriales.",
-        ],
+        recommendations:
+          result.explicacion?.acciones && result.explicacion.acciones.length > 0
+            ? result.explicacion.acciones
+            : [
+                "Reforzar acciones preventivas y seguimiento.",
+                "Monitorear indicadores críticos semanalmente.",
+                "Coordinar intervención con equipos territoriales.",
+              ],
+        context: result.explicacion?.contexto_situacional,
+        keyFactors: result.explicacion?.factores_clave ?? [],
       };
       setPrediction(newPrediction);
       setShowDetails(false);
@@ -248,9 +255,7 @@ export function PredictionPanel() {
                   Contexto situacional
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-indigo-600 dark:text-indigo-200/80">
-                  La tasa se encuentra en un rango moderado respecto a la media
-                  histórica. Se recomienda fortalecer la detección temprana y
-                  reforzar los protocolos de derivación.
+                  {prediction.context || "Sin contexto proporcionado"}
                 </p>
               </div>
               <ul className="space-y-3">
@@ -264,6 +269,24 @@ export function PredictionPanel() {
                   </li>
                 ))}
               </ul>
+
+              {prediction.keyFactors && prediction.keyFactors.length > 0 ? (
+                <div className="mt-4 space-y-2">
+                  <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                    Factores clave
+                  </div>
+                  <ul className="space-y-2">
+                    {prediction.keyFactors.map((factor) => (
+                      <li
+                        key={factor}
+                        className="rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-200"
+                      >
+                        {factor}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
 
@@ -294,14 +317,6 @@ export function PredictionPanel() {
                     </p>
                   </div>
                 ))}
-              </div>
-              <Separator />
-              <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-100 to-white p-4 text-sm text-slate-600 dark:border-slate-700 dark:from-slate-800/80 dark:to-slate-900">
-                <p>
-                  Proyección generada con un horizonte de{" "}
-                  <strong>4 semanas</strong> y sensibilidad ajustada para
-                  priorizar la detección en población adolescente.
-                </p>
               </div>
             </CardContent>
           </Card>

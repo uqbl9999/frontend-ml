@@ -19,10 +19,18 @@ type FeatureImportanceChartProps = {
 const formatter = (value: number) => value.toFixed(4);
 
 export function FeatureImportanceChart({ data }: FeatureImportanceChartProps) {
+  // Ensure data is iterable to avoid runtime crashes when API returns
+  // an unexpected shape (e.g., object or null). Fallback to empty array.
+  const safeData = Array.isArray(data) ? data : [];
+  const importanceValues = safeData.map((d) => d.importance);
+  const maxImportance = importanceValues.length
+    ? Math.max(...importanceValues) * 1.1
+    : 0;
+
   return (
     <ResponsiveContainer width="100%" height={360}>
       <BarChart
-        data={[...data]}
+        data={[...safeData]}
         layout="vertical"
         margin={{ top: 16, right: 24, bottom: 16, left: 16 }}
       >
@@ -34,7 +42,7 @@ export function FeatureImportanceChart({ data }: FeatureImportanceChartProps) {
         />
         <XAxis
           type="number"
-          domain={[0, Math.max(...data.map((d) => d.importance)) * 1.1]}
+          domain={[0, maxImportance]}
           tickFormatter={formatter}
           axisLine={false}
           tickLine={false}

@@ -98,23 +98,26 @@ export function MetricsPanel() {
               Información del modelo
             </Badge>
             <CardDescription>
-              Metadatos y configuración reportados por el servicio.
+              Metadatos principales reportados por el servicio.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
-            {Object.entries(modelInfo).map(([key, value]) => (
-              <div
-                key={key}
-                className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/40"
-              >
-                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                  {key}
-                </span>
-                <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
-                  {typeof value === "object" ? JSON.stringify(value) : String(value)}
-                </p>
-              </div>
-            ))}
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/40">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                MODEL_TYPE
+              </span>
+              <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
+                {(modelInfo as any)?.model_type ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/40">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                N_FEATURES
+              </span>
+              <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
+                {(modelInfo as any)?.n_features ?? "—"}
+              </p>
+            </div>
           </CardContent>
         </Card>
       ) : null}

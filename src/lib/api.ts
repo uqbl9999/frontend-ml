@@ -33,9 +33,15 @@ export const api = {
 
   // Model endpoints
   getModelInfo: () => fetchJSON<Record<string, unknown>>("/model/info"),
-  getModelFeatures: (top_n?: number) => fetchJSON<Array<{ feature: string; importance: number }>>(
-    top_n ? `/model/features?top_n=${top_n}` : "/model/features",
-  ),
+  getModelFeatures: async (top_n?: number) => {
+    const res = await fetchJSON<
+      | Array<{ feature: string; importance: number }>
+      | { top_features?: Array<{ feature: string; importance: number }> }
+    >(top_n ? `/model/features?top_n=${top_n}` : "/model/features");
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res?.top_features)) return res.top_features;
+    return [];
+  },
 
   // Prediction endpoints
   predict: (payload: {
@@ -50,6 +56,11 @@ export const api = {
     fetchJSON<{
       tasa_positividad_predicha: number;
       interpretacion: string;
+      explicacion?: {
+        contexto_situacional?: string;
+        acciones?: string[];
+        factores_clave?: string[];
+      };
       input_data: {
         NroMes: number;
         Departamento: string;
@@ -59,7 +70,7 @@ export const api = {
         DetalleTamizaje: string;
         ubigeo?: number;
       };
-    }>("/predict", {
+    }>("/predict/explain", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
