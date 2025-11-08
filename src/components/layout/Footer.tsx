@@ -11,7 +11,7 @@ export function Footer() {
           </h2>
           <p className="mt-2 text-sm text-indigo-100">
             Datos: Portal de Datos Abiertos del Gobierno del Perú | Modelo:
-            RandomForest Optimizado
+            GradientBoosting Optimizado
           </p>
         </div>
       </div>

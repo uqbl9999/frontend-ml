@@ -126,7 +126,7 @@ export function PredictionPanel() {
           </CardTitle>
           <CardDescription className="text-sm leading-relaxed">
             La predicción se alimenta de series históricas de tamizajes de salud
-            mental y aplica un modelo RandomForest optimizado. Ajusta los
+            mental y aplica un modelo GradientBoosting optimizado. Ajusta los
             parámetros y obtén un estimado para el siguiente periodo.
           </CardDescription>
         </CardHeader>
