@@ -43,6 +43,37 @@ export const api = {
     return [];
   },
 
+  // Exploratory statistics endpoints (exactos según especificación)
+  // GET /statistics/descriptive
+  getDescriptiveStats: async () => {
+    const res = await fetchJSON<DescriptiveStatsResponse>("/statistics/descriptive");
+    return res;
+  },
+
+  // GET /statistics/distribution
+  getDistributionStats: async () => {
+    const res = await fetchJSON<DistributionResponse>("/statistics/distribution");
+    return res;
+  },
+
+  // GET /statistics/heatmap/screening-type
+  getHeatmapScreeningType: async () => {
+    const res = await fetchJSON<ScreeningTypeHeatmapResponse>("/statistics/heatmap/screening-type");
+    return res;
+  },
+
+  // GET /statistics/heatmap/department
+  getHeatmapDepartment: async () => {
+    const res = await fetchJSON<DepartmentHeatmapResponse>("/statistics/heatmap/department");
+    return res;
+  },
+
+  // GET /statistics/screening-types
+  getScreeningTypesSummary: async () => {
+    const res = await fetchJSON<ScreeningTypesSummaryResponse>("/statistics/screening-types");
+    return res;
+  },
+
   // Prediction endpoints
   predict: (payload: {
     NroMes: number;
@@ -91,3 +122,67 @@ export const api = {
 
 export type PredictPayload = Parameters<typeof api.predict>[0];
 export type PredictResponse = Awaited<ReturnType<typeof api.predict>>;
+
+export type DepartmentStat = {
+  departamento: string;
+  total_registros: number;
+  suma_total_casos: number;
+  suma_positivos: number;
+  tasa_positividad_promedio: number;
+  tasa_positividad_mediana: number;
+  tasa_positividad_max: number;
+};
+
+// Types exactos de endpoints nuevos
+export type DescriptiveStatsResponse = {
+  media: number;
+  mediana: number;
+  desviacion_estandar: number;
+  maximo: number;
+};
+
+export type DistributionResponse = {
+  distribucion_registros: {
+    total_tamizajes: number;
+    solo_tamizajes_positivos: number;
+    tamizajes_con_violencia_politica: number;
+  };
+  suma_total_casos: {
+    total_tamizajes: number;
+    solo_tamizajes_positivos: number;
+    tamizajes_con_violencia_politica: number;
+  };
+};
+
+export type ScreeningTypeHeatmapResponse = {
+  grupo_filtro: string;
+  data: Array<{
+    grupo: string;
+    [k: string]: number | string; // claves de tipos con valores numéricos
+  }>;
+};
+
+export type DepartmentHeatmapResponse = {
+  grupo_filtro: string;
+  top_n: string;
+  data: Array<{
+    departamento: string;
+    solo_tamizajes_positivos: number;
+    tamizajes_c_condicion_adicional_violencia_politica: number;
+    total_de_tamizajes: number;
+    total: number;
+  }>;
+};
+
+export type ScreeningTypesSummaryResponse = {
+  count: number;
+  data: Array<{
+    detalle_tamizaje: string;
+    total_registros: number;
+    suma_total_casos: number;
+    suma_positivos: number;
+    tasa_positividad_promedio: number;
+    tasa_positividad_mediana: number;
+    tasa_positividad_max: number;
+  }>;
+};
