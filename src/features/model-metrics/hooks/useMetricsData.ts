@@ -66,14 +66,6 @@ export function useMetricsData() {
               quality: qualityLowerIsBetter(optimized.MSE, [250, 300, 400]),
               description: "Error cuadrático medio. Penaliza errores grandes.",
             },
-            {
-              id: "rmse",
-              label: "RMSE (Optimized Train)",
-              value: optimized.RMSE,
-              format: (v) => v.toFixed(2),
-              quality: qualityLowerIsBetter(optimized.RMSE, [16, 18, 22]),
-              description: "Raíz de MSE, en unidades originales de la tasa.",
-            },
           ];
           setMetrics(derived);
 
@@ -93,10 +85,6 @@ export function useMetricsData() {
             {
               title: "MSE (Error Cuadrático Medio)",
               content: `${optimized.MSE.toFixed(2)}: Evalúa el error cuadrático; menor indica mejor ajuste.`,
-            },
-            {
-              title: "RMSE",
-              content: `${optimized.RMSE.toFixed(2)}: Interpretación directa en unidades de tasa de positividad.`,
             },
             {
               title: "Conclusión",
