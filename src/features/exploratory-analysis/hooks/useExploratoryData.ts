@@ -80,7 +80,6 @@ export function useExploratoryData() {
       .then((d: DescriptiveStatsResponse) => {
         setStats([
           { label: "Media", value: Number(d.media) || 0, color: "text-indigo-500" },
-          { label: "Mediana", value: Number(d.mediana) || 0, color: "text-emerald-500" },
           {
             label: "Desv. Estándar",
             value: Number(d.desviacion_estandar) || 0,
