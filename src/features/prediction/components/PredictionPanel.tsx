@@ -7,6 +7,7 @@ import {
   MapPin,
   ShieldHalf,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { api } from "../../../lib/api";
 
@@ -19,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/card";
-import { Separator } from "../../../components/ui/separator";
 import { usePredictionForm } from "../hooks/usePredictionForm";
 
 type PredictionResult = {
@@ -38,7 +38,7 @@ export function PredictionPanel() {
   const [lastUbigeo, setLastUbigeo] = useState<number | undefined>(undefined);
 
   const formattedAttributes = useMemo(() => {
-    const base = fields.map((field) => {
+    const base: Array<{ id: string; label: string; value: string; Icon: LucideIcon }> = fields.map((field) => {
       const selectedOption = field.options.find(
         (option) => option.value === field.value,
       );
@@ -53,7 +53,7 @@ export function PredictionPanel() {
 
     if (typeof lastUbigeo === "number") {
       base.push({
-        id: "ubigeo" as const,
+        id: "ubigeo",
         label: "Ubigeo",
         value: String(lastUbigeo),
         Icon: MapPin,

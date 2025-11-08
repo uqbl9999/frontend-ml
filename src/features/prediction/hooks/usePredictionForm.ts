@@ -40,7 +40,7 @@ const SEX_OPTIONS: ReadonlyArray<{ label: string; value: string }> = [
   { label: "Masculino", value: "M" },
 ];
 
-type Option = (typeof optionBlueprint)[number]["options"][number];
+type Option = { label: string; value: string };
 
 type Field = {
   readonly id: keyof FormState;

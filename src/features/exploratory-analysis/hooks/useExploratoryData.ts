@@ -22,6 +22,19 @@ type ExploratoryInsight = {
   readonly change: string;
 };
 
+// Tipos ampliados para evitar literales estrechos provenientes de datos mock con `as const`
+type DistributionItem = {
+  readonly group: string;
+  readonly registros?: number;
+  readonly porcentaje?: number;
+  readonly casos?: number;
+};
+
+type HeatmapTypeValue = { readonly type: string; readonly casos: number };
+type HeatmapDeptValue = { readonly department: string; readonly casos: number };
+type HeatmapGroup<T> = { readonly group: string; readonly values: ReadonlyArray<T> };
+type StatItem = { readonly label: string; readonly value: number; readonly color?: string };
+
 const MOCK_INSIGHTS: ExploratoryInsight[] = [
   {
     id: "trend-growth",
@@ -51,11 +64,11 @@ const MOCK_INSIGHTS: ExploratoryInsight[] = [
 
 export function useExploratoryData() {
   const [insights, setInsights] = useState<ExploratoryInsight[]>([]);
-  const [groupDistribution, setGroupDistribution] = useState(screeningGroupDistribution);
-  const [groupTotals, setGroupTotals] = useState(screeningGroupTotals);
-  const [typeHeatmap, setTypeHeatmap] = useState(screeningTypeHeatmap);
-  const [deptHeatmap, setDeptHeatmap] = useState(departmentHeatmap);
-  const [stats, setStats] = useState(descriptiveStats);
+  const [groupDistribution, setGroupDistribution] = useState<ReadonlyArray<DistributionItem>>(screeningGroupDistribution as unknown as ReadonlyArray<DistributionItem>);
+  const [groupTotals, setGroupTotals] = useState<ReadonlyArray<DistributionItem>>(screeningGroupTotals as unknown as ReadonlyArray<DistributionItem>);
+  const [typeHeatmap, setTypeHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapTypeValue>>>(screeningTypeHeatmap as unknown as ReadonlyArray<HeatmapGroup<HeatmapTypeValue>>);
+  const [deptHeatmap, setDeptHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapDeptValue>>>(departmentHeatmap as unknown as ReadonlyArray<HeatmapGroup<HeatmapDeptValue>>);
+  const [stats, setStats] = useState<ReadonlyArray<StatItem>>(descriptiveStats as unknown as ReadonlyArray<StatItem>);
 
   useEffect(() => {
     // KPIs/insights (placeholder)
