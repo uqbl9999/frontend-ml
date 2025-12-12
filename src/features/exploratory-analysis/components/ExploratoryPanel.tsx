@@ -12,6 +12,7 @@ import { DescriptiveStats } from "./DescriptiveStats";
 import { DistributionBarChart } from "./DistributionBarChart";
 import { HeatmapMatrix } from "./HeatmapMatrix";
 import { useExploratoryData } from "../hooks/useExploratoryData";
+import { LoadingSpinner } from "../../../components/tamizajes/LoadingSpinner";
 
 export function ExploratoryPanel() {
   const {
@@ -20,10 +21,26 @@ export function ExploratoryPanel() {
     typeHeatmap,
     deptHeatmap,
     stats,
+    isLoading,
   } = useExploratoryData();
 
   return (
     <div className="space-y-6">
+      {isLoading ? (
+        <Card className="border-slate-200/80 bg-slate-50/60 shadow-lg dark:border-slate-800/60 dark:bg-slate-900/60">
+          <CardHeader>
+            <Badge variant="default" className="w-fit">
+              <Flame className="h-4 w-4" />
+              Cargando análisis exploratorio
+            </Badge>
+            <CardDescription>Obteniendo datos agregados desde la API</CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center">
+            <LoadingSpinner message="Cargando datos..." submessage="Por favor espera" />
+          </CardContent>
+        </Card>
+      ) : null}
+
       {/* <Card className="border-slate-200/80 bg-slate-50/60 shadow-lg dark:border-slate-800/60 dark:bg-slate-900/60">
         <CardHeader className="gap-3">
           <Badge variant="default" className="w-fit">

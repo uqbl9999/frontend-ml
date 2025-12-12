@@ -11,9 +11,10 @@ import {
 import { Separator } from "../../../components/ui/separator";
 import { FeatureImportanceChart } from "./FeatureImportanceChart";
 import { useMetricsData } from "../hooks/useMetricsData";
+import { LoadingSpinner } from "../../../components/tamizajes/LoadingSpinner";
 
 export function MetricsPanel() {
-  const { metrics, featureImportance, interpretation, modelInfo, topN, setTopN } = useMetricsData();
+  const { metrics, featureImportance, interpretation, modelInfo, topN, setTopN, isLoading } = useMetricsData();
 
   return (
     <div className="space-y-6">
@@ -32,6 +33,14 @@ export function MetricsPanel() {
           </CardDescription>
         </CardHeader>
       </Card>
+
+      {isLoading ? (
+        <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+          <CardContent className="flex items-center justify-center">
+            <LoadingSpinner message="Cargando métricas del modelo..." submessage="Consultando la API" />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <div className="grid gap-4 md:grid-cols-3">
         {metrics.map((metric) => (

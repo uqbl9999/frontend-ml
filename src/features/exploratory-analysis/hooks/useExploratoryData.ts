@@ -7,14 +7,6 @@ import type {
   DepartmentHeatmapResponse,
 } from "../../../lib/api";
 
-import {
-  departmentHeatmap,
-  descriptiveStats,
-  screeningGroupDistribution,
-  screeningGroupTotals,
-  screeningTypeHeatmap,
-} from "../data/mock-charts";
-
 type ExploratoryInsight = {
   readonly id: string;
   readonly title: string;
@@ -35,158 +27,128 @@ type HeatmapDeptValue = { readonly department: string; readonly casos: number };
 type HeatmapGroup<T> = { readonly group: string; readonly values: ReadonlyArray<T> };
 type StatItem = { readonly label: string; readonly value: number; readonly color?: string };
 
-const MOCK_INSIGHTS: ExploratoryInsight[] = [
-  {
-    id: "trend-growth",
-    title: "Crecimiento mensual promedio",
-    value: "+3.4%",
-    change: "vs. último trimestre",
-  },
-  {
-    id: "life-stage",
-    title: "Mayor incidencia",
-    value: "Adolescentes",
-    change: "grupo de riesgo 2024",
-  },
-  {
-    id: "department-leader",
-    title: "Departamento con mayor variación",
-    value: "Cusco",
-    change: "Incremento de 6.2 pp",
-  },
-  {
-    id: "screening-focus",
-    title: "Tamizaje prioritario",
-    value: "Violencia Familiar",
-    change: "Mayor tasa de positividad",
-  },
-];
-
 export function useExploratoryData() {
-  const [insights, setInsights] = useState<ExploratoryInsight[]>([]);
-  const [groupDistribution, setGroupDistribution] = useState<ReadonlyArray<DistributionItem>>(screeningGroupDistribution as unknown as ReadonlyArray<DistributionItem>);
-  const [groupTotals, setGroupTotals] = useState<ReadonlyArray<DistributionItem>>(screeningGroupTotals as unknown as ReadonlyArray<DistributionItem>);
-  const [typeHeatmap, setTypeHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapTypeValue>>>(screeningTypeHeatmap as unknown as ReadonlyArray<HeatmapGroup<HeatmapTypeValue>>);
-  const [deptHeatmap, setDeptHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapDeptValue>>>(departmentHeatmap as unknown as ReadonlyArray<HeatmapGroup<HeatmapDeptValue>>);
-  const [stats, setStats] = useState<ReadonlyArray<StatItem>>(descriptiveStats as unknown as ReadonlyArray<StatItem>);
+  const [insights] = useState<ExploratoryInsight[]>([]);
+  const [groupDistribution, setGroupDistribution] = useState<ReadonlyArray<DistributionItem>>([]);
+  const [groupTotals, setGroupTotals] = useState<ReadonlyArray<DistributionItem>>([]);
+  const [typeHeatmap, setTypeHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapTypeValue>>>([]);
+  const [deptHeatmap, setDeptHeatmap] = useState<ReadonlyArray<HeatmapGroup<HeatmapDeptValue>>>([]);
+  const [stats, setStats] = useState<ReadonlyArray<StatItem>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // KPIs/insights (placeholder)
-    setInsights(MOCK_INSIGHTS);
-
-    // 1) Estadísticas descriptivas
-    api
-      .getDescriptiveStats()
-      .then((d: DescriptiveStatsResponse) => {
-        setStats([
-          { label: "Media", value: Number(d.media) || 0, color: "text-indigo-500" },
-          {
-            label: "Desv. Estándar",
-            value: Number(d.desviacion_estandar) || 0,
-            color: "text-amber-500",
-          },
-          { label: "Máximo", value: Number(d.maximo) || 0, color: "text-rose-500" },
-        ]);
-      })
-      .catch(() => setStats(descriptiveStats));
-
-    // 2) Distribución de registros y suma total de casos
-    api
-      .getDistributionStats()
-      .then((dist: DistributionResponse) => {
-        const reg = dist?.distribucion_registros ?? {
-          total_tamizajes: 0,
-          solo_tamizajes_positivos: 0,
-          tamizajes_con_violencia_politica: 0,
-        };
-        const tot = dist?.suma_total_casos ?? {
-          total_tamizajes: 0,
-          solo_tamizajes_positivos: 0,
-          tamizajes_con_violencia_politica: 0,
-        };
-
-        setGroupDistribution([
-          { group: "Total de Tamizajes", registros: Number(reg.total_tamizajes) || 0 },
-          {
-            group: "Solo Tamizajes Positivos",
-            registros: Number(reg.solo_tamizajes_positivos) || 0,
-          },
-          {
-            group: "Tamizajes con Violencia Política",
-            registros: Number(reg.tamizajes_con_violencia_politica) || 0,
-          },
-        ]);
-
-        setGroupTotals([
-          { group: "Total de Tamizajes", casos: Number(tot.total_tamizajes) || 0 },
-          {
-            group: "Solo Tamizajes Positivos",
-            casos: Number(tot.solo_tamizajes_positivos) || 0,
-          },
-          {
-            group: "Tamizajes con Violencia Política",
-            casos: Number(tot.tamizajes_con_violencia_politica) || 0,
-          },
-        ]);
-      })
-      .catch(() => {
-        setGroupDistribution(screeningGroupDistribution);
-        setGroupTotals(screeningGroupTotals);
-      });
-
-    // 3) Heatmap por tipo de tamizaje
-    api
-      .getHeatmapScreeningType()
-      .then((resp: ScreeningTypeHeatmapResponse) => {
-        const rows = Array.isArray(resp?.data) ? resp.data : [];
-        if (rows.length === 0) {
-          setTypeHeatmap(screeningTypeHeatmap);
-          return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setIsLoading(true);
+        // 1) Estadísticas descriptivas
+        try {
+          const d: DescriptiveStatsResponse = await api.getDescriptiveStats();
+          setStats([
+            { label: "Media", value: Number(d.media) || 0, color: "text-indigo-500" },
+            {
+              label: "Desv. Estándar",
+              value: Number(d.desviacion_estandar) || 0,
+              color: "text-amber-500",
+            },
+            { label: "Máximo", value: Number(d.maximo) || 0, color: "text-rose-500" },
+          ]);
+        } catch {
+          setStats([]);
         }
-        const normalized = rows.map((row) => {
-          const { grupo, ...rest } = row;
-          const entries = Object.entries(rest)
-            .filter(([, v]) => typeof v === "number")
-            .map(([k, v]) => ({ type: k, casos: Number(v) || 0 }));
-          return { group: String(grupo), values: entries };
-        });
-        setTypeHeatmap(normalized);
-      })
-      .catch(() => setTypeHeatmap(screeningTypeHeatmap));
 
-    // 4) Heatmap por departamento
-    api
-      .getHeatmapDepartment()
-      .then((resp: DepartmentHeatmapResponse) => {
-        const rows = Array.isArray(resp?.data) ? resp.data : [];
-        if (rows.length === 0) {
-          setDeptHeatmap(departmentHeatmap);
-          return;
+        // 2) Distribución de registros y suma total de casos
+        try {
+          const dist: DistributionResponse = await api.getDistributionStats();
+          const reg = dist?.distribucion_registros ?? {
+            total_tamizajes: 0,
+            solo_tamizajes_positivos: 0,
+            tamizajes_con_violencia_politica: 0,
+          };
+          const tot = dist?.suma_total_casos ?? {
+            total_tamizajes: 0,
+            solo_tamizajes_positivos: 0,
+            tamizajes_con_violencia_politica: 0,
+          };
+          setGroupDistribution([
+            { group: "Total de Tamizajes", registros: Number(reg.total_tamizajes) || 0 },
+            {
+              group: "Solo Tamizajes Positivos",
+              registros: Number(reg.solo_tamizajes_positivos) || 0,
+            },
+            {
+              group: "Tamizajes con Violencia Política",
+              registros: Number(reg.tamizajes_con_violencia_politica) || 0,
+            },
+          ]);
+          setGroupTotals([
+            { group: "Total de Tamizajes", casos: Number(tot.total_tamizajes) || 0 },
+            {
+              group: "Solo Tamizajes Positivos",
+              casos: Number(tot.solo_tamizajes_positivos) || 0,
+            },
+            {
+              group: "Tamizajes con Violencia Política",
+              casos: Number(tot.tamizajes_con_violencia_politica) || 0,
+            },
+          ]);
+        } catch {
+          setGroupDistribution([]);
+          setGroupTotals([]);
         }
-        const groupTotal = {
-          group: "Total de Tamizajes",
-          values: rows.map((r) => ({
-            department: r.departamento,
-            casos: Number(r.total_de_tamizajes) || 0,
-          })),
-        };
-        const groupPositive = {
-          group: "Solo Tamizajes Positivos",
-          values: rows.map((r) => ({
-            department: r.departamento,
-            casos: Number(r.solo_tamizajes_positivos) || 0,
-          })),
-        };
-        const groupViolencia = {
-          group: "Tamizajes con Violencia Política",
-          values: rows.map((r) => ({
-            department: r.departamento,
-            casos: Number(r.tamizajes_c_condicion_adicional_violencia_politica) || 0,
-          })),
-        };
-        setDeptHeatmap([groupTotal, groupPositive, groupViolencia]);
-      })
-      .catch(() => setDeptHeatmap(departmentHeatmap));
+
+        // 3) Heatmap por tipo de tamizaje
+        try {
+          const resp: ScreeningTypeHeatmapResponse = await api.getHeatmapScreeningType();
+          const rows = Array.isArray(resp?.data) ? resp.data : [];
+          const normalized = rows.map((row) => {
+            const { grupo, ...rest } = row;
+            const entries = Object.entries(rest)
+              .filter(([, v]) => typeof v === "number")
+              .map(([k, v]) => ({ type: k, casos: Number(v) || 0 }));
+            return { group: String(grupo), values: entries };
+          });
+          setTypeHeatmap(normalized);
+        } catch {
+          setTypeHeatmap([]);
+        }
+
+        // 4) Heatmap por departamento
+        try {
+          const resp: DepartmentHeatmapResponse = await api.getHeatmapDepartment();
+          const rows = Array.isArray(resp?.data) ? resp.data : [];
+          const groupTotal = {
+            group: "Total de Tamizajes",
+            values: rows.map((r) => ({
+              department: r.departamento,
+              casos: Number(r.total_de_tamizajes) || 0,
+            })),
+          };
+          const groupPositive = {
+            group: "Solo Tamizajes Positivos",
+            values: rows.map((r) => ({
+              department: r.departamento,
+              casos: Number(r.solo_tamizajes_positivos) || 0,
+            })),
+          };
+          const groupViolencia = {
+            group: "Tamizajes con Violencia Política",
+            values: rows.map((r) => ({
+              department: r.departamento,
+              casos: Number(r.tamizajes_c_condicion_adicional_violencia_politica) || 0,
+            })),
+          };
+          setDeptHeatmap([groupTotal, groupPositive, groupViolencia]);
+        } catch {
+          setDeptHeatmap([]);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return {
@@ -196,5 +158,6 @@ export function useExploratoryData() {
     typeHeatmap,
     deptHeatmap,
     stats,
+    isLoading,
   };
 }

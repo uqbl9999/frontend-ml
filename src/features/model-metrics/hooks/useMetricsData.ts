@@ -35,11 +35,13 @@ export function useMetricsData() {
   const [interpretation, setInterpretation] = useState<ReadonlyArray<{ title: string; content: string; highlight?: boolean }>>([]);
   const [modelInfo, setModelInfo] = useState<ModelInfoMeta | null>(null);
   const [topN, setTopN] = useState<number>(10);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
+        setIsLoading(true);
         const [features, info] = await Promise.all([
           api.getModelFeatures(topN),
           api.getModelInfo(),
@@ -121,6 +123,8 @@ export function useMetricsData() {
             highlight: true,
           },
         ]);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
     })();
     return () => {
@@ -128,5 +132,5 @@ export function useMetricsData() {
     };
   }, [topN]);
 
-  return { metrics, featureImportance, interpretation, modelInfo, topN, setTopN };
+  return { metrics, featureImportance, interpretation, modelInfo, topN, setTopN, isLoading };
 }
