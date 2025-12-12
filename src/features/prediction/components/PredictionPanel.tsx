@@ -36,6 +36,7 @@ export function PredictionPanel() {
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [lastUbigeo, setLastUbigeo] = useState<number | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formattedAttributes = useMemo(() => {
     const base: Array<{ id: string; label: string; value: string; Icon: LucideIcon }> = fields.map((field) => {
@@ -66,6 +67,7 @@ export function PredictionPanel() {
     onSubmit(event);
 
     try {
+      setIsSubmitting(true);
       // Obtener ubigeo para el par dept/prov
       let ubigeo: number | undefined = undefined;
       if (formState.department && formState.province) {
@@ -110,6 +112,8 @@ export function PredictionPanel() {
     } catch (error) {
       console.error("Error al predecir:", error);
       setPrediction(null);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -182,9 +186,23 @@ export function PredictionPanel() {
                   Modelo entrenado con datos del 2017
                 </p>
               </div>
-              <Button type="submit" className="gap-2 px-6">
-                Predecir tasa de positividad
-                <ArrowUpRight className="h-4 w-4" />
+              <Button
+                type="submit"
+                className="gap-2 px-6"
+                disabled={isSubmitting}
+                aria-busy={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white" />
+                    Calculando...
+                  </>
+                ) : (
+                  <>
+                    Predecir tasa de positividad
+                    <ArrowUpRight className="h-4 w-4" />
+                  </>
+                )}
               </Button>
             </div>
           </form>
