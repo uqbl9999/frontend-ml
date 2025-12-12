@@ -1,5 +1,6 @@
-import { Activity, BarChart3, LineChart } from "lucide-react";
+import { Activity, BarChart3, LineChart, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import {
   Tabs,
@@ -29,6 +30,12 @@ const TABS = [
     label: "Métricas del Modelo",
     description: "Evalúa el rendimiento del modelo predictivo",
     icon: BarChart3,
+  },
+  {
+    id: "tamizajes",
+    label: "Tamizajes",
+    description: "Detección por rayos X y estado del modelo",
+    icon: ImageIcon,
   },
 ] as const;
 
@@ -69,6 +76,44 @@ export function LandingPage() {
 
       <TabsContent value="metrics">
         <MetricsPanel />
+      </TabsContent>
+
+      <TabsContent value="tamizajes">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="mb-4 flex items-center gap-3">
+              <ImageIcon className="h-6 w-6 text-indigo-500" />
+              <h3 className="text-base font-semibold">Análisis de imágenes</h3>
+            </div>
+            <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+              Sube una radiografía torácica, visualiza el preview y ejecuta la
+              predicción con loader y botones deshabilitados durante el proceso.
+            </p>
+            <Link
+              to="/tamizajes-imagenes"
+              className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Ir a Tamizajes
+            </Link>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="mb-4 flex items-center gap-3">
+              <BarChart3 className="h-6 w-6 text-indigo-500" />
+              <h3 className="text-base font-semibold">Información del modelo</h3>
+            </div>
+            <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+              Consulta clases, arquitectura y estadísticas del modelo de
+              clasificación por imágenes.
+            </p>
+            <Link
+              to="/tamizajes-imagenes/modelo-info"
+              className="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-slate-200"
+            >
+              Ver información
+            </Link>
+          </div>
+        </div>
       </TabsContent>
     </Tabs>
   );
