@@ -6,6 +6,8 @@ import { ClinicalExplanation } from '../../components/tamizajes/ClinicalExplanat
 import { ProbabilityChart } from '../../components/tamizajes/ProbabilityChart';
 import { ImagePreview } from '../../components/tamizajes/ImagePreview';
 import type { PredictionResponse } from '../../services/imageAnalysisService';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
 
 interface LocationState {
   prediction: PredictionResponse;
@@ -104,73 +106,51 @@ NOTA: Este análisis fue generado por inteligencia artificial y debe ser validad
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <button
+    <div className="py-8">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mb-6 flex items-center justify-between">
+          <Button
+            variant="outline"
             onClick={() => navigate('/tamizajes-imagenes')}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md px-2 py-1"
+            className="inline-flex items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Volver al análisis</span>
-          </button>
-          
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => setShowImagePreview(true)}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Eye className="w-4 h-4" />
-              <span className="hidden sm:inline">Ver imagen</span>
-            </button>
-            
-            <button
-              onClick={handleDownloadReport}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Descargar</span>
-            </button>
-            
-            <button
-              onClick={handleShare}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Compartir</span>
-            </button>
-            
-            <button
-              onClick={handlePrint}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Printer className="w-4 h-4" />
-              <span className="hidden sm:inline">Imprimir</span>
-            </button>
+            <ArrowLeft className="h-4 w-4" />
+            Volver al análisis
+          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setShowImagePreview(true)}>
+              <Eye className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">Ver imagen</span>
+            </Button>
+            <Button variant="outline" onClick={handleDownloadReport}>
+              <Download className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">Descargar</span>
+            </Button>
+            <Button variant="outline" onClick={handleShare}>
+              <Share2 className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">Compartir</span>
+            </Button>
+            <Button variant="outline" onClick={handlePrint}>
+              <Printer className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">Imprimir</span>
+            </Button>
           </div>
         </div>
 
-        {/* Main Results */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Prediction Result */}
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card className="p-6">
             <PredictionResult prediction={prediction} />
-          </div>
-
-          {/* Probability Chart */}
-          <div>
+          </Card>
+          <Card className="p-6">
             <ProbabilityChart prediction={prediction} />
-          </div>
+          </Card>
         </div>
 
-        {/* Clinical Explanation */}
-        <div className="mb-8">
+        <Card className="mb-8 p-6">
           <ClinicalExplanation prediction={prediction} />
-        </div>
+        </Card>
 
-        {/* Metadata */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
             <FileText className="w-6 h-6 text-gray-600" />
             <h3 className="text-lg font-semibold text-gray-800">Información Técnica</h3>
@@ -203,10 +183,9 @@ NOTA: Este análisis fue generado por inteligencia artificial y debe ser validad
               </p>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
-      {/* Image Preview Modal */}
       {showImagePreview && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-full overflow-auto">

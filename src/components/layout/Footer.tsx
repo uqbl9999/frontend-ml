@@ -7,7 +7,7 @@ export function Footer() {
             Sistema de Predicción de Tamizajes de Salud Mental
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-white">
-            Desarrollado por: Gutiérrez, Vásquez, Huacausi, Urtecho, Mantilla
+            Desarrollado por: Gutiérrez, Vásquez, Urtecho, Mantilla
           </h2>
           <p className="mt-2 text-sm text-indigo-100">
             Datos: Portal de Datos Abiertos del Gobierno del Perú | Modelo:

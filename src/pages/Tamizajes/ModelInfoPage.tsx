@@ -7,6 +7,7 @@ import { PerformanceMetrics } from '../../components/tamizajes/PerformanceMetric
 import { LoadingSpinner } from '../../components/tamizajes/LoadingSpinner';
 import { imageAnalysisService } from '../../services/imageAnalysisService';
 import type { ModelInfo, ModelClass, ModelStatistics } from '../../services/imageAnalysisService';
+import { Button } from '../../components/ui/button';
 
 export const ModelInfoPage: React.FC = () => {
   const navigate = useNavigate();
@@ -79,25 +80,21 @@ export const ModelInfoPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
+    <div className="py-8">
+      <div className="mx-auto max-w-6xl px-4">
         <div className="flex items-center justify-between mb-8">
-          <button
+          <Button
+            variant="outline"
             onClick={() => navigate('/tamizajes-imagenes')}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md px-2 py-1"
+            className="inline-flex items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Volver al análisis</span>
-          </button>
-          
-          <button
-            onClick={handleRefresh}
-            className="inline-flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Actualizar</span>
-          </button>
+            <ArrowLeft className="h-4 w-4" />
+            Volver al análisis
+          </Button>
+          <Button variant="outline" onClick={handleRefresh} className="inline-flex items-center gap-2">
+            <RefreshCw className="h-4 w-4" />
+            Actualizar
+          </Button>
         </div>
 
         {/* Title */}

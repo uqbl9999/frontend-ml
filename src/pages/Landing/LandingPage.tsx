@@ -33,7 +33,7 @@ const TABS = [
   },
   {
     id: "tamizajes",
-    label: "Tamizajes",
+    label: "Rayos X",
     description: "Detección por rayos X y estado del modelo",
     icon: ImageIcon,
   },
