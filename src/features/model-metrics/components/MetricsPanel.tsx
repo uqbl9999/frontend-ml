@@ -107,7 +107,7 @@ export function MetricsPanel() {
                 MODEL_TYPE
               </span>
               <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
-                {(modelInfo as any)?.model_type ?? "—"}
+                {modelInfo?.model_type ?? "—"}
               </p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/40">
@@ -115,7 +115,7 @@ export function MetricsPanel() {
                 N_FEATURES
               </span>
               <p className="mt-1 font-medium text-slate-900 dark:text-slate-50">
-                {(modelInfo as any)?.n_features ?? "—"}
+                {modelInfo?.n_features ?? "—"}
               </p>
             </div>
           </CardContent>

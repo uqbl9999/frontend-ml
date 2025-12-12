@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Activity, Brain, Image as ImageIcon } from 'lucide-react';
 import { ImageUploader } from '../../components/tamizajes/ImageUploader';
 import { ImagePreview } from '../../components/tamizajes/ImagePreview';
-import { LoadingSpinner, FullScreenLoader, ButtonLoader } from '../../components/tamizajes/LoadingSpinner';
+import { FullScreenLoader, ButtonLoader } from '../../components/tamizajes/LoadingSpinner';
 import { imageAnalysisService } from '../../services/imageAnalysisService';
 
 export const ImageUploadPage: React.FC = () => {

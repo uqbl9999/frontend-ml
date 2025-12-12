@@ -16,11 +16,24 @@ type ModelMetric = {
 const qualityR2 = (v: number): MetricQuality => (v >= 0.75 ? "Excelente" : v >= 0.6 ? "Bueno" : v >= 0.5 ? "Aceptable" : "En observación");
 const qualityLowerIsBetter = (v: number, t: [number, number, number]): MetricQuality => (v <= t[0] ? "Excelente" : v <= t[1] ? "Bueno" : v <= t[2] ? "Aceptable" : "En observación");
 
+type ModelInfoMeta = {
+  readonly model_type?: string;
+  readonly n_features?: number;
+  readonly metrics?: {
+    readonly optimized_train?: {
+      readonly R2: number;
+      readonly MAE: number;
+      readonly MSE: number;
+      readonly RMSE: number;
+    };
+  };
+};
+
 export function useMetricsData() {
   const [metrics, setMetrics] = useState<ModelMetric[]>([]);
   const [featureImportance, setFeatureImportance] = useState<ReadonlyArray<{ feature: string; importance: number }>>([]);
   const [interpretation, setInterpretation] = useState<ReadonlyArray<{ title: string; content: string; highlight?: boolean }>>([]);
-  const [modelInfo, setModelInfo] = useState<Record<string, unknown> | null>(null);
+  const [modelInfo, setModelInfo] = useState<ModelInfoMeta | null>(null);
   const [topN, setTopN] = useState<number>(10);
 
   useEffect(() => {
@@ -33,12 +46,11 @@ export function useMetricsData() {
         ]);
         if (cancelled) return;
         setFeatureImportance(features);
-        setModelInfo(info);
+        setModelInfo(info as ModelInfoMeta);
 
         // Derivar métricas desde optimized_train
-        const optimized = (info as any)?.metrics?.optimized_train as
-          | { R2: number; MAE: number; MSE: number; RMSE: number }
-          | undefined;
+        const infoTyped = info as ModelInfoMeta;
+        const optimized = infoTyped?.metrics?.optimized_train;
         if (optimized) {
           const derived: ModelMetric[] = [
             {
@@ -72,7 +84,7 @@ export function useMetricsData() {
           const interpretationItems = [
             {
               title: "Modelo",
-              content: `Tipo: ${(info as any)?.model_type ?? "desconocido"} con ${(info as any)?.n_features ?? "?"} características.`,
+              content: `Tipo: ${infoTyped?.model_type ?? "desconocido"} con ${infoTyped?.n_features ?? "?"} características.`,
             },
             {
               title: "R² (Coeficiente de Determinación)",
@@ -96,8 +108,19 @@ export function useMetricsData() {
           ] as const;
           setInterpretation(interpretationItems);
         }
-      } catch (error) {
-        console.error("Error cargando métricas del modelo:", error);
+      } catch {
+        if (cancelled) return;
+        // Fallback silencioso cuando el backend no está disponible
+        setFeatureImportance([]);
+        setModelInfo(null);
+        setMetrics([]);
+        setInterpretation([
+          {
+            title: "Servicio no disponible",
+            content: "No se pudo obtener la información del modelo. Verifica la conexión con la API.",
+            highlight: true,
+          },
+        ]);
       }
     })();
     return () => {

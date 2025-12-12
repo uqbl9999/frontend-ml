@@ -38,13 +38,15 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     const imageFile = files.find(file => file.type.startsWith('image/'));
     
     if (imageFile) {
-      onImageSelect(imageFile);
+      if (validateImageFile(imageFile)) {
+        onImageSelect(imageFile);
+      }
     }
   }, [onImageSelect, disabled]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith('image/') && validateImageFile(file)) {
       onImageSelect(file);
     }
   }, [onImageSelect]);
@@ -66,11 +68,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     return true;
   };
 
-  const handleImageSelect = (file: File) => {
-    if (validateImageFile(file)) {
-      onImageSelect(file);
-    }
-  };
+  // 
 
   if (selectedImage) {
     return (

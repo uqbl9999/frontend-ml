@@ -1,17 +1,31 @@
-const BASE_URL = (import.meta.env?.VITE_API_URL as string) || "http://127.0.0.1:8000";
+const BASE_URL = (import.meta.env?.VITE_API_URL as string) || "http://localhost:8000";
 
 async function fetchJSON<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    ...init,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API error ${res.status}: ${text}`);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3500);
+  try {
+    const res = await fetch(`${BASE_URL}${path}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      signal: controller.signal,
+      ...init,
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`API error ${res.status}: ${text || "Unexpected error"}`);
+    }
+    return res.json() as Promise<T>;
+  } catch (err: unknown) {
+    const e = err as { name?: string; message?: string };
+    if (e?.name === "AbortError") {
+      throw new Error("API timeout: no response from server");
+    }
+    throw new Error(`Network error: ${e?.message || "Failed to fetch"}`);
+  } finally {
+    clearTimeout(timeout);
   }
-  return res.json() as Promise<T>;
 }
 
 export const api = {

@@ -146,7 +146,7 @@ export function useExploratoryData() {
         const normalized = rows.map((row) => {
           const { grupo, ...rest } = row;
           const entries = Object.entries(rest)
-            .filter(([_, v]) => typeof v === "number")
+            .filter(([, v]) => typeof v === "number")
             .map(([k, v]) => ({ type: k, casos: Number(v) || 0 }));
           return { group: String(grupo), values: entries };
         });
