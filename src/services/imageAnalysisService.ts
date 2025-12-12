@@ -54,7 +54,7 @@ export interface ModelStatistics {
 }
 
 class ImageAnalysisService {
-  private baseURL = 'http://localhost:8000';
+  private baseURL = (import.meta.env?.VITE_API_URL as string) || "http://localhost:8000";
 
   async predictImage(file: File): Promise<PredictionResponse> {
     const formData = new FormData();
