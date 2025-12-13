@@ -169,6 +169,73 @@ export function LandingPage() {
         </Card>
       </section>
 
+      <section className="mb-10">
+        <Card className="bg-white/90 backdrop-blur dark:bg-slate-900/90">
+          <CardHeader className="gap-2">
+            <Badge variant="default" className="w-fit">
+              <ImageIcon className="h-4 w-4" />
+              Guía de Rayos X
+            </Badge>
+            <CardTitle className="text-2xl">Instrucciones para análisis por imágenes</CardTitle>
+            <CardDescription>
+              Sigue estos pasos para cargar, previsualizar y analizar una radiografía torácica.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                step: "1",
+                title: "Carga la imagen",
+                desc: "Arrastra o selecciona un archivo JPG/PNG hasta 10MB.",
+                Icon: ImageIcon,
+                link: "/tamizajes-imagenes",
+              },
+              {
+                step: "2",
+                title: "Previsualiza",
+                desc: "Verifica la imagen, haz zoom y rota si es necesario.",
+                Icon: ImageIcon,
+                link: "/tamizajes-imagenes",
+              },
+              {
+                step: "3",
+                title: "Analiza con IA",
+                desc: "Ejecuta el análisis y espera el resultado.",
+                Icon: Activity,
+                link: "/tamizajes-imagenes",
+              },
+              {
+                step: "4",
+                title: "Revisa y comparte",
+                desc: "Explora probabilidades, descarga y comparte el resumen.",
+                Icon: CheckCircle2,
+                link: "/tamizajes-imagenes/modelo-info",
+              },
+            ].map(({ step, title, desc, Icon, link }) => (
+              <div
+                key={step}
+                className="relative rounded-2xl border border-slate-200 bg-slate-50/60 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-800/40"
+              >
+                <div className="absolute -top-3 -left-3 rounded-full bg-indigo-600 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                  Paso {step}
+                </div>
+                <div className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                  <Icon className="h-4 w-4 text-indigo-500" />
+                  {title}
+                </div>
+                <p className="text-sm text-slate-700 dark:text-slate-200">{desc}</p>
+                <Link
+                  to={link}
+                  className="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-300"
+                >
+                  Ir a la sección
+                </Link>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </section>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
       <TabsList>
         {TABS.map((tab) => {

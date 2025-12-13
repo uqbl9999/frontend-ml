@@ -55,8 +55,8 @@ export const ClassDescriptions: React.FC<ClassDescriptionsProps> = ({ classes })
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-center space-x-3 mb-6">
-        <Info className="w-6 h-6 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-800">Clases de Diagnóstico</h3>
+        <Info className="w-6 h-6 text-indigo-600" />
+        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Clases de Diagnóstico</h3>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -68,7 +68,7 @@ export const ClassDescriptions: React.FC<ClassDescriptionsProps> = ({ classes })
                 {modelClass.class_name}
               </h4>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
               {modelClass.description}
             </p>
           </div>
@@ -76,14 +76,14 @@ export const ClassDescriptions: React.FC<ClassDescriptionsProps> = ({ classes })
       </div>
 
       {/* Información adicional */}
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg dark:bg-indigo-500/10 dark:border-indigo-500/30">
         <div className="flex items-start space-x-3">
-          <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <Info className="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0" />
           <div>
-            <h4 className="text-sm font-semibold text-blue-800 mb-2">
+            <h4 className="text-sm font-semibold text-indigo-800 dark:text-indigo-300 mb-2">
               Sobre las Clases de Diagnóstico
             </h4>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-indigo-700 dark:text-indigo-200">
               El modelo está entrenado para identificar cuatro condiciones principales en radiografías de tórax. 
               Cada clase representa un patrón radiológico característico que ayuda en el diagnóstico diferencial 
               de enfermedades respiratorias.

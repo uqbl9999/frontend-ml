@@ -66,26 +66,26 @@ export const ModelStats: React.FC<ModelStatsProps> = ({ modelInfo }) => {
       </div>
 
       {/* Información del Framework */}
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <h4 className="text-sm font-semibold text-blue-800 mb-3">DETALLES TÉCNICOS</h4>
+      <div className="mt-6 p-4 bg-indigo-50 rounded-lg dark:bg-indigo-500/10">
+        <h4 className="text-sm font-semibold text-indigo-800 dark:text-indigo-300 mb-3">DETALLES TÉCNICOS</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-blue-700 font-medium">Framework:</span>
-            <span className="ml-2 text-blue-800">{modelInfo.framework}</span>
+            <span className="text-indigo-700 dark:text-indigo-300 font-medium">Framework:</span>
+            <span className="ml-2 text-indigo-800 dark:text-indigo-200">{modelInfo.framework}</span>
           </div>
           <div>
-            <span className="text-blue-700 font-medium">Tipo:</span>
-            <span className="ml-2 text-blue-800">{modelInfo.model_type}</span>
+            <span className="text-indigo-700 dark:text-indigo-300 font-medium">Tipo:</span>
+            <span className="ml-2 text-indigo-800 dark:text-indigo-200">{modelInfo.model_type}</span>
           </div>
           <div>
-            <span className="text-blue-700 font-medium">Forma de Entrada:</span>
-            <span className="ml-2 text-blue-800">
+            <span className="text-indigo-700 dark:text-indigo-300 font-medium">Forma de Entrada:</span>
+            <span className="ml-2 text-indigo-800 dark:text-indigo-200">
               {modelInfo.input_shape.join(' × ')} × {modelInfo.input_shape[2]}
             </span>
           </div>
           <div>
-            <span className="text-blue-700 font-medium">Clases:</span>
-            <span className="ml-2 text-blue-800">{modelInfo.classes.join(', ')}</span>
+            <span className="text-indigo-700 dark:text-indigo-300 font-medium">Clases:</span>
+            <span className="ml-2 text-indigo-800 dark:text-indigo-200">{modelInfo.classes.join(', ')}</span>
           </div>
         </div>
       </div>

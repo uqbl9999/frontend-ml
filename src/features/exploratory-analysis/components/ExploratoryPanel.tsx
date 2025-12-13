@@ -108,7 +108,7 @@ export function ExploratoryPanel() {
                 <DistributionBarChart
                   data={groupTotals}
                   valueKey="casos"
-                  color="#0ea5e9"
+                  color="#6366F1"
                 />
               </div>
             </CardContent>
