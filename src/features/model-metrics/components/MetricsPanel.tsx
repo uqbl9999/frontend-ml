@@ -78,7 +78,7 @@ export function MetricsPanel() {
                 Importancia de características
               </Badge>
               <CardDescription>
-                Peso relativo de las variables dentro del modelo Random Forest.
+                Peso relativo de las variables dentro del modelo Gradient Boosting.
               </CardDescription>
               <div className="mt-2 inline-flex items-center gap-3">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
