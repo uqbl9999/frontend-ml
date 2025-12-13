@@ -79,81 +79,85 @@ export function ExploratoryPanel() {
         </CardContent>
       </Card> */}
 
-      <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
-        <CardHeader className="gap-3">
-          <Badge variant="secondary" className="w-fit">
-            <Flame className="h-4 w-4" />
-            Distribución por grupos
-          </Badge>
-          <CardDescription>
-            Comparación de registros y total de casos por grupo de tamizaje.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
-            <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">
-              Distribución de registros
-            </p>
-            <DistributionBarChart
-              data={groupDistribution}
-              valueKey="registros"
-            />
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
-            <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">
-              Suma total de casos
-            </p>
-            <DistributionBarChart
-              data={groupTotals}
-              valueKey="casos"
-              color="#0ea5e9"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      {!isLoading && (
+        <>
+          <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+            <CardHeader className="gap-3">
+              <Badge variant="secondary" className="w-fit">
+                <Flame className="h-4 w-4" />
+                Distribución por grupos
+              </Badge>
+              <CardDescription>
+                Comparación de registros y total de casos por grupo de tamizaje.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+                <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">
+                  Distribución de registros
+                </p>
+                <DistributionBarChart
+                  data={groupDistribution}
+                  valueKey="registros"
+                />
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+                <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">
+                  Suma total de casos
+                </p>
+                <DistributionBarChart
+                  data={groupTotals}
+                  valueKey="casos"
+                  color="#0ea5e9"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-      <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
-        <CardHeader className="gap-2">
-          <Badge variant="secondary" className="w-fit">
-            Heatmap por tipo de tamizaje
-          </Badge>
-          <CardDescription>
-            Casos agregados por grupo de tamizaje y tipo específico de evaluación.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <HeatmapMatrix
-            data={typeHeatmap}
-            axisKey="type"
-            title="Casos por tipo de tamizaje y grupo"
-          />
-        </CardContent>
-      </Card>
+          <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+            <CardHeader className="gap-2">
+              <Badge variant="secondary" className="w-fit">
+                Heatmap por tipo de tamizaje
+              </Badge>
+              <CardDescription>
+                Casos agregados por grupo de tamizaje y tipo específico de evaluación.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HeatmapMatrix
+                data={typeHeatmap}
+                axisKey="type"
+                title="Casos por tipo de tamizaje y grupo"
+              />
+            </CardContent>
+          </Card>
 
-      <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
-        <CardHeader className="gap-2">
-          <Badge variant="secondary" className="w-fit">
-            Heatmap por departamento
-          </Badge>
-          <CardDescription>
-            Volumen de casos por departamento y grupo de tamizaje.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <HeatmapMatrix
-            data={deptHeatmap}
-            axisKey="department"
-            title="Casos por departamento y grupo"
-          />
-        </CardContent>
-        <Separator className="mt-4" />
-        <CardContent className="pt-4 text-xs text-slate-500 dark:text-slate-400">
-          Los mapas de calor destacan los segmentos con mayor relevancia para
-          focalizar intervenciones y recursos.
-        </CardContent>
-      </Card>
+          <Card className="border-slate-200 bg-white shadow-md dark:border-slate-800 dark:bg-slate-900">
+            <CardHeader className="gap-2">
+              <Badge variant="secondary" className="w-fit">
+                Heatmap por departamento
+              </Badge>
+              <CardDescription>
+                Volumen de casos por departamento y grupo de tamizaje.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HeatmapMatrix
+                data={deptHeatmap}
+                axisKey="department"
+                title="Casos por departamento y grupo"
+              />
+            </CardContent>
+            <Separator className="mt-4" />
+            <CardContent className="pt-4 text-xs text-slate-500 dark:text-slate-400">
+              Los mapas de calor destacan los segmentos con mayor relevancia para
+              focalizar intervenciones y recursos.
+            </CardContent>
+          </Card>
 
-      <DescriptiveStats stats={stats} />
+          <DescriptiveStats stats={stats} />
+        </>
+      )}
     </div>
   );
 }

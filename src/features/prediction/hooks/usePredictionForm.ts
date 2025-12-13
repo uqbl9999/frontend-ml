@@ -57,6 +57,7 @@ export function usePredictionForm() {
   const [loadingProvinces, setLoadingProvinces] = useState<boolean>(false);
   const [lifeStageOptions, setLifeStageOptions] = useState<ReadonlyArray<{ label: string; value: string }>>([]);
   const [screeningTypeOptions, setScreeningTypeOptions] = useState<ReadonlyArray<{ label: string; value: string }>>([]);
+  const [loadingMetadata, setLoadingMetadata] = useState<boolean>(true);
 
   const [formState, setFormState] = useState<FormState>(() => ({
     department: "",
@@ -72,6 +73,7 @@ export function usePredictionForm() {
     let cancelled = false;
     (async () => {
       try {
+        setLoadingMetadata(true);
         const [departamentosRaw, etapasRaw, tamizajesRaw] = await Promise.all([
           api.getDepartamentos(),
           api.getEtapas(),
@@ -111,8 +113,10 @@ export function usePredictionForm() {
           lifeStage: stageOptions[0]?.value ?? "",
           screeningType: screeningOptions[0]?.value ?? "",
         }));
+        setLoadingMetadata(false);
       } catch (error) {
         console.error("Error cargando metadata:", error);
+        setLoadingMetadata(false);
       }
     })();
     return () => {
@@ -157,7 +161,12 @@ export function usePredictionForm() {
       {
         id: "department" as const,
         label: "Departamento",
-        options: departmentOptions,
+        options:
+          loadingMetadata && departmentOptions.length === 0
+            ? [{ label: "Cargando...", value: "" }]
+            : departmentOptions.length > 0
+              ? departmentOptions
+              : [{ label: "Sin datos", value: "" }],
         icon: MapPin,
       },
       {
@@ -174,13 +183,23 @@ export function usePredictionForm() {
       {
         id: "lifeStage" as const,
         label: "Etapa de Vida",
-        options: lifeStageOptions,
+        options:
+          loadingMetadata && lifeStageOptions.length === 0
+            ? [{ label: "Cargando...", value: "" }]
+            : lifeStageOptions.length > 0
+              ? lifeStageOptions
+              : [{ label: "Sin datos", value: "" }],
         icon: Users,
       },
       {
         id: "screeningType" as const,
         label: "Tipo de Tamizaje",
-        options: screeningTypeOptions,
+        options:
+          loadingMetadata && screeningTypeOptions.length === 0
+            ? [{ label: "Cargando...", value: "" }]
+            : screeningTypeOptions.length > 0
+              ? screeningTypeOptions
+              : [{ label: "Sin datos", value: "" }],
         icon: Scan,
       },
       {
@@ -221,7 +240,7 @@ export function usePredictionForm() {
         }));
       },
     }));
-  }, [departmentOptions, provinceOptions, lifeStageOptions, screeningTypeOptions, loadingProvinces, formState]);
+  }, [departmentOptions, provinceOptions, lifeStageOptions, screeningTypeOptions, loadingProvinces, loadingMetadata, formState]);
 
   const onSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
@@ -231,5 +250,5 @@ export function usePredictionForm() {
     [formState],
   );
 
-  return { fields, onSubmit, formState };
+  return { fields, onSubmit, formState, isLoadingMetadata: loadingMetadata };
 }

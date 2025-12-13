@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 
 export interface PredictionResponse {
   predicted_class: string;
@@ -55,18 +55,49 @@ export interface ModelStatistics {
 
 class ImageAnalysisService {
   private baseURL = (import.meta.env?.VITE_API_URL as string) || "http://localhost:8000";
+  private client: AxiosInstance;
+
+  constructor() {
+    this.client = axios.create({
+      baseURL: this.baseURL,
+      timeout: 45000,
+      headers: { Accept: 'application/json' },
+    });
+  }
+
+  private async withRetry<T>(fn: () => Promise<T>): Promise<T> {
+    const maxRetries = 4;
+    const baseDelayMs = 1500;
+    let lastError: unknown = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (err: unknown) {
+        lastError = err;
+        const isAxios = axios.isAxiosError(err);
+        const status = isAxios ? err.response?.status : undefined;
+        const retryable = !isAxios || (status && (status >= 500 || status === 429));
+        if (retryable && attempt < maxRetries) {
+          const delay = baseDelayMs * Math.pow(2, attempt) + Math.floor(Math.random() * 500);
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+        throw err;
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error('Request failed');
+  }
 
   async predictImage(file: File): Promise<PredictionResponse> {
     const formData = new FormData();
     formData.append('file', file);
     
     try {
-      const response = await axios.post(`${this.baseURL}/image/predict/explain`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
-        }
-      });
+      const response = await this.withRetry(() =>
+        this.client.post(`/image/predict/explain`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+      );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -78,11 +109,9 @@ class ImageAnalysisService {
   
   async getModelInfo(): Promise<ModelInfo> {
     try {
-      const response = await axios.get(`${this.baseURL}/image/model/info`, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+      const response = await this.withRetry(() =>
+        this.client.get(`/image/model/info`)
+      );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -94,11 +123,9 @@ class ImageAnalysisService {
   
   async getModelClasses(): Promise<ModelClass[]> {
     try {
-      const response = await axios.get(`${this.baseURL}/image/model/classes`, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+      const response = await this.withRetry(() =>
+        this.client.get(`/image/model/classes`)
+      );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -110,11 +137,9 @@ class ImageAnalysisService {
   
   async getModelStatistics(): Promise<ModelStatistics> {
     try {
-      const response = await axios.get(`${this.baseURL}/image/model/statistics`, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+      const response = await this.withRetry(() =>
+        this.client.get(`/image/model/statistics`)
+      );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

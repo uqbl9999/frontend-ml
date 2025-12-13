@@ -1,31 +1,55 @@
 const BASE_URL = (import.meta.env?.VITE_API_URL as string) || "http://localhost:8000";
 
 async function fetchJSON<T>(path: string, init?: RequestInit): Promise<T> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3500);
-  try {
-    const res = await fetch(`${BASE_URL}${path}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      signal: controller.signal,
-      ...init,
-    });
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      throw new Error(`API error ${res.status}: ${text || "Unexpected error"}`);
+  const maxRetries = 4;
+  const baseDelayMs = 1500;
+  const timeoutPerAttemptMs = 45000;
+
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutPerAttemptMs);
+    try {
+      const res = await fetch(`${BASE_URL}${path}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        signal: controller.signal,
+        ...init,
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        const isRetryable =
+          res.status >= 500 ||
+          res.status === 429;
+        if (isRetryable && attempt < maxRetries) {
+          const delay = baseDelayMs * Math.pow(2, attempt) + Math.floor(Math.random() * 500);
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+        throw new Error(`API error ${res.status}: ${text || "Unexpected error"}`);
+      }
+      return res.json() as Promise<T>;
+    } catch (err: unknown) {
+      lastError = err;
+      const e = err as { name?: string; message?: string };
+      const isAbort = e?.name === "AbortError";
+      const isNetwork = !isAbort && e != null;
+      if ((isAbort || isNetwork) && attempt < maxRetries) {
+        const delay = baseDelayMs * Math.pow(2, attempt) + Math.floor(Math.random() * 500);
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+      if (isAbort) {
+        throw new Error("API timeout: no response from server");
+      }
+      throw new Error(`Network error: ${e?.message || "Failed to fetch"}`);
+    } finally {
+      clearTimeout(timeout);
     }
-    return res.json() as Promise<T>;
-  } catch (err: unknown) {
-    const e = err as { name?: string; message?: string };
-    if (e?.name === "AbortError") {
-      throw new Error("API timeout: no response from server");
-    }
-    throw new Error(`Network error: ${e?.message || "Failed to fetch"}`);
-  } finally {
-    clearTimeout(timeout);
   }
+  throw lastError instanceof Error ? lastError : new Error("Request failed");
 }
 
 export const api = {

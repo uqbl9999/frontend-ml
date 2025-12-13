@@ -32,7 +32,7 @@ type PredictionResult = {
 };
 
 export function PredictionPanel() {
-  const { fields, onSubmit, formState } = usePredictionForm();
+  const { fields, onSubmit, formState, isLoadingMetadata } = usePredictionForm();
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [lastUbigeo, setLastUbigeo] = useState<number | undefined>(undefined);
@@ -158,7 +158,8 @@ export function PredictionPanel() {
                       onChange={(event) => field.onChange(event.target.value)}
                       disabled={
                         // Habilita provincia cuando existe un departamento seleccionado
-                        field.id === "province" && !formState.department
+                        isLoadingMetadata ||
+                        (field.id === "province" && !formState.department)
                       }
                       className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:ring-indigo-500/40"
                     >
@@ -189,13 +190,13 @@ export function PredictionPanel() {
               <Button
                 type="submit"
                 className="gap-2 px-6"
-                disabled={isSubmitting}
-                aria-busy={isSubmitting}
+                disabled={isSubmitting || isLoadingMetadata}
+                aria-busy={isSubmitting || isLoadingMetadata}
               >
-                {isSubmitting ? (
+                {isSubmitting || isLoadingMetadata ? (
                   <>
                     <span className="inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white" />
-                    Calculando...
+                    {isLoadingMetadata ? "Cargando metadatos..." : "Calculando..."}
                   </>
                 ) : (
                   <>
