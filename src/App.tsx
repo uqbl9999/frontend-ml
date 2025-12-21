@@ -1,5 +1,6 @@
 import { AppShell } from "./components/layout/AppShell";
-import { LandingPage } from "./pages/Landing";
+import { HomePage } from "./pages/Home";
+import { PredictionDashboard } from "./pages/Landing";
 import { UIProvider } from "./providers/ui-provider";
 import { Routes, Route } from "react-router-dom";
 import { ImageUploadPage } from "./pages/Tamizajes/ImageUploadPage";
@@ -11,7 +12,8 @@ function App() {
     <UIProvider>
       <AppShell>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/app" element={<PredictionDashboard />} />
           <Route path="/tamizajes-imagenes" element={<ImageUploadPage />} />
           <Route
             path="/tamizajes-imagenes/resultados"
