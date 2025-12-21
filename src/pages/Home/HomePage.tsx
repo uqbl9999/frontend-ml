@@ -16,7 +16,11 @@ import {
   Cpu,
   Globe,
   ExternalLink,
-  BookOpen
+  BookOpen,
+  Info,
+  HelpCircle,
+  AlertTriangle,
+  Users
 } from "lucide-react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
@@ -87,11 +91,26 @@ export function HomePage() {
                 </div>
               </div>
 
-              <p className="mb-6 text-slate-700 dark:text-slate-300">
+              <p className="mb-4 text-slate-700 dark:text-slate-300">
                 Predice la tasa de positividad en tamizajes de salud mental basándose en 
                 características demográficas, geográficas y temporales. Optimiza la asignación 
                 de recursos hospitalarios y personal médico especializado.
               </p>
+              
+              <div className="mb-6 rounded-xl border border-indigo-200 bg-indigo-50/50 p-3 dark:border-indigo-800 dark:bg-indigo-950/20">
+                <div className="flex items-start gap-2">
+                  <Info className="h-4 w-4 text-indigo-600 mt-0.5 flex-shrink-0 dark:text-indigo-400" />
+                  <div className="text-xs text-indigo-700 dark:text-indigo-300">
+                    <p className="font-medium mb-1">¿Qué puedes hacer aquí?</p>
+                    <ul className="space-y-1 text-indigo-600 dark:text-indigo-400">
+                      <li>• Configurar filtros (departamento, provincia, mes, año)</li>
+                      <li>• Generar predicciones de tasa de positividad</li>
+                      <li>• Explorar tendencias históricas con gráficos</li>
+                      <li>• Evaluar métricas de precisión del modelo</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
               <div className="mb-6 space-y-3">
                 {TAMIZAJES_FEATURES.map((feature, idx) => {
@@ -114,18 +133,23 @@ export function HomePage() {
                 })}
               </div>
 
-              <Button
-                size="lg"
-                className="w-full cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg transition-all duration-300 hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl group-hover:scale-105"
-                style={{ cursor: "pointer" }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/app");
-                }}
-              >
-                Acceder al Sistema de Predicción
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  size="lg"
+                  className="w-full cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg transition-all duration-300 hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl group-hover:scale-105"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/app");
+                  }}
+                >
+                  Acceder al Sistema de Predicción
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+                <p className="text-xs text-center text-slate-500 dark:text-slate-400">
+                  💡 Configura filtros y obtén predicciones instantáneas con análisis detallado
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -152,11 +176,37 @@ export function HomePage() {
                 </div>
               </div>
 
-              <p className="mb-6 text-slate-700 dark:text-slate-300">
+              <p className="mb-4 text-slate-700 dark:text-slate-300">
                 Analiza radiografías torácicas para detectar condiciones respiratorias usando 
                 tecnología de reconocimiento de imágenes avanzada. Proporciona diagnósticos 
                 asistidos con explicaciones clínicas detalladas.
               </p>
+              
+              {/* Información adicional */}
+              <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50/50 p-3 dark:border-sky-800 dark:bg-sky-950/20">
+                <div className="flex items-start gap-2">
+                  <Info className="h-4 w-4 text-sky-600 mt-0.5 flex-shrink-0 dark:text-sky-400" />
+                  <div className="text-xs text-sky-700 dark:text-sky-300">
+                    <p className="font-medium mb-1">¿Qué puedes hacer aquí?</p>
+                    <ul className="space-y-1 text-sky-600 dark:text-sky-400">
+                      <li>• Subir radiografías de tórax (solo imágenes médicas)</li>
+                      <li>• Obtener análisis con probabilidades por condición</li>
+                      <li>• Revisar explicaciones clínicas detalladas</li>
+                      <li>• Ver información técnica del modelo</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Advertencia sobre tipo de imágenes */}
+              <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-800 dark:bg-amber-950/20">
+                <div className="flex items-start gap-2">
+                  <HelpCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0 dark:text-amber-400" />
+                  <p className="text-xs text-amber-700 dark:text-amber-300">
+                    <strong>Importante:</strong> Solo acepta radiografías de tórax. No suba imágenes de animales, objetos u otras fotografías.
+                  </p>
+                </div>
+              </div>
 
               <div className="mb-6 space-y-3">
                 {IMAGENES_FEATURES.map((feature, idx) => {
@@ -179,21 +229,93 @@ export function HomePage() {
                 })}
               </div>
 
-              <Button
-                size="lg"
-                className="w-full cursor-pointer bg-gradient-to-r from-sky-600 to-cyan-600 text-white shadow-lg transition-all duration-300 hover:from-sky-700 hover:to-cyan-700 hover:shadow-xl group-hover:scale-105"
-                style={{ cursor: "pointer" }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/tamizajes-imagenes");
-                }}
-              >
-                Acceder al Analizador de Imágenes
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  size="lg"
+                  className="w-full cursor-pointer bg-gradient-to-r from-sky-600 to-cyan-600 text-white shadow-lg transition-all duration-300 hover:from-sky-700 hover:to-cyan-700 hover:shadow-xl group-hover:scale-105"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/tamizajes-imagenes");
+                  }}
+                >
+                  Acceder al Analizador de Imágenes
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+                <p className="text-xs text-center text-slate-500 dark:text-slate-400">
+                  ⚠️ Solo acepta radiografías de tórax. El análisis toma 30-60 segundos.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
+      </section>
+
+      {/* Sección: Cómo usar */}
+      <section className="mb-16">
+        <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30">
+          <CardContent className="p-8">
+            <h3 className="mb-6 text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+              <Sparkles className="h-6 w-6 text-indigo-600" />
+              ¿Cómo usar MedAI Perú?
+            </h3>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-xl border border-indigo-200 bg-white p-6 dark:border-indigo-800 dark:bg-slate-900">
+                <div className="mb-3 flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-indigo-600" />
+                  <h4 className="text-lg font-semibold text-indigo-700 dark:text-indigo-300">
+                    Predicción de Tamizajes
+                  </h4>
+                </div>
+                <ol className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-indigo-600">1.</span>
+                    <span>Selecciona los filtros: departamento, provincia, etapa de vida, tipo de tamizaje, sexo y mes</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-indigo-600">2.</span>
+                    <span>Haz clic en "Predecir tasa de positividad"</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-indigo-600">3.</span>
+                    <span>Revisa el resultado: tasa estimada, clasificación de riesgo y recomendaciones</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-indigo-600">4.</span>
+                    <span>Explora las otras pestañas para análisis exploratorio y métricas del modelo</span>
+                  </li>
+                </ol>
+              </div>
+              
+              <div className="rounded-xl border border-sky-200 bg-white p-6 dark:border-sky-800 dark:bg-slate-900">
+                <div className="mb-3 flex items-center gap-2">
+                  <ImageIcon className="h-5 w-5 text-sky-600" />
+                  <h4 className="text-lg font-semibold text-sky-700 dark:text-sky-300">
+                    Análisis de Imágenes
+                  </h4>
+                </div>
+                <ol className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-sky-600">1.</span>
+                    <span>Sube una <strong>radiografía de tórax</strong> (solo imágenes médicas, formato JPG/PNG, máx 10MB)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-sky-600">2.</span>
+                    <span>Verifica la vista previa para confirmar que es una radiografía válida</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-sky-600">3.</span>
+                    <span>Haz clic en "Analizar Imagen" y espera 30-60 segundos</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold text-sky-600">4.</span>
+                    <span>Revisa los resultados: condición detectada, probabilidades y explicación clínica</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="mb-16">
@@ -480,14 +602,102 @@ export function HomePage() {
                 </div>
               </div> */}
             </div>
+            
+            <div className="mt-8 rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 dark:border-indigo-800 dark:from-indigo-950/30 dark:to-purple-950/30">
+              <div className="mb-4 flex items-center gap-2">
+                <Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                <h4 className="text-lg font-semibold text-indigo-900 dark:text-indigo-100">
+                  Equipo de Desarrollo
+                </h4>
+              </div>
+              <p className="mb-4 text-sm text-slate-700 dark:text-slate-300">
+                Este proyecto fue desarrollado por el grupo 1 del curso de Machine Learning & Big Data de la maestría de Ingeniería de Sistemas con mención en Ingeniería de Sistemas de la Universidad Nacional Mayor de San Marcos.
+              </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    'Alex Vásquez',
+                    'Brandon Urtecho',
+                    'Fernando Gutierrez',
+                    'Melanie Mantilla'
+                  ].map((name, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-lg border border-indigo-200 bg-white px-4 py-3 text-center text-sm font-medium text-indigo-900 shadow-sm transition hover:border-indigo-300 hover:shadow dark:border-indigo-800 dark:bg-slate-900 dark:text-indigo-100 dark:hover:border-indigo-700"
+                  >
+                    {name}
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </section>
 
-      <section className="text-center">
-        <p className="text-sm text-slate-600 dark:text-slate-400">
-          Sistema desarrollado con inteligencia artificial y análisis de datos para la salud mental y análisis de imágenes médicas en Perú
-        </p>
+      <section className="mb-8">
+        <Card className="border-amber-200 bg-amber-50/50 dark:border-amber-800 dark:bg-amber-950/20">
+          <CardContent className="p-8">
+            <div className="mb-4 flex items-center gap-3">
+              <AlertTriangle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              <h3 className="text-2xl font-bold text-amber-900 dark:text-amber-100">
+                Advertencias y Limitaciones
+              </h3>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-xl border border-amber-200 bg-white p-5 dark:border-amber-800 dark:bg-slate-900">
+                <h4 className="mb-3 text-lg font-semibold text-amber-800 dark:text-amber-200">
+                  Predicción de Tamizajes
+                </h4>
+                <ul className="space-y-2 text-sm text-amber-700 dark:text-amber-300">
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Las predicciones son <strong>estimaciones</strong> basadas en datos históricos</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Los resultados deben ser validados por profesionales de salud mental</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>El modelo fue entrenado con datos del 2017 - considerar contexto actual</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Las tasas pueden variar según factores externos no considerados</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="rounded-xl border border-amber-200 bg-white p-5 dark:border-amber-800 dark:bg-slate-900">
+                <h4 className="mb-3 text-lg font-semibold text-amber-800 dark:text-amber-200">
+                  Análisis de Imágenes
+                </h4>
+                <ul className="space-y-2 text-sm text-amber-700 dark:text-amber-300">
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span><strong>Solo acepta radiografías de tórax</strong> - no otras imágenes</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Es una <strong>herramienta de apoyo diagnóstico</strong>, no reemplaza evaluación médica</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Los resultados deben ser revisados por un radiólogo o médico especialista</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>La precisión puede variar según la calidad y tipo de radiografía</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-6 rounded-xl border border-amber-300 bg-amber-100 p-4 dark:border-amber-700 dark:bg-amber-900/30">
+              <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">
+                ⚠️ Importante: Estos sistemas son herramientas de apoyo. Siempre consulte con profesionales médicos calificados para decisiones clínicas.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

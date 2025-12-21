@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import { ImageUploadPage } from "./pages/Tamizajes/ImageUploadPage";
 import { ResultsPage } from "./pages/Tamizajes/ResultsPage";
 import { ModelInfoPage } from "./pages/Tamizajes/ModelInfoPage";
+import { PrivacyPolicyPage } from "./pages/Legal";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           <Route
             path="/tamizajes-imagenes/modelo-info"
             element={<ModelInfoPage />}
+          />
+          <Route
+            path="/politicas-privacidad"
+            element={<PrivacyPolicyPage />}
           />
         </Routes>
       </AppShell>

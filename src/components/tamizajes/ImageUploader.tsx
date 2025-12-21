@@ -113,10 +113,13 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         <Upload className="w-12 h-12 text-gray-400" />
         <div>
           <p className="text-lg font-medium text-gray-700">
-            Arrastra o selecciona una imagen
+            Arrastra o selecciona una <strong>radiografía de tórax</strong>
           </p>
           <p className="text-sm text-gray-500 mt-1">
-            Formatos: JPG, PNG • Máximo: 10MB
+            Formatos: JPG, PNG • Máximo: 10MB • Solo imágenes médicas
+          </p>
+          <p className="text-xs text-amber-600 mt-2 font-medium">
+            ⚠️ Solo acepta radiografías de tórax, no otras imágenes
           </p>
         </div>
         <label className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>

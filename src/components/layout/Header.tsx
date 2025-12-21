@@ -1,4 +1,4 @@
-import { Sparkles, Home } from "lucide-react";
+import { Sparkles, Home, Shield } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { ThemeToggle } from "../navigation/ThemeToggle";
@@ -36,6 +36,15 @@ export function Header() {
               Inicio
             </Button>
           )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/politicas-privacidad")}
+            className="hidden sm:inline-flex border-white/20 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white dark:bg-white/5 dark:hover:bg-white/10"
+            title="Políticas de Privacidad y Seguridad"
+          >
+            <Shield className="h-4 w-4" />
+          </Button>
           <ThemeToggle />
         </div>
       </div>

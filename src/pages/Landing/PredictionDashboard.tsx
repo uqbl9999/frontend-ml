@@ -60,7 +60,7 @@ export function PredictionDashboard() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="mb-6">
-          <TabsList className="grid w-full grid-cols-3 bg-white/90 backdrop-blur dark:bg-slate-900/90">
+          <TabsList className="grid w-full grid-cols-3 gap-1.5 sm:gap-3 bg-white/90 backdrop-blur dark:bg-slate-900/90">
             {TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -69,28 +69,28 @@ export function PredictionDashboard() {
                 <TabsTrigger 
                   key={tab.id} 
                   value={tab.id}
-                  className={`group relative flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all cursor-pointer ${
+                  className={`group relative flex flex-col items-center gap-0.5 sm:gap-2 rounded-md sm:rounded-xl border-2 p-1.5 sm:p-4 transition-all cursor-pointer ${
                     isActive 
                       ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-950/30" 
                       : "border-transparent hover:border-indigo-200 hover:bg-indigo-50/50 dark:hover:border-indigo-800 dark:hover:bg-indigo-950/20"
                   }`}
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-lg transition-all ${
+                  <div className={`flex h-6 w-6 sm:h-12 sm:w-12 items-center justify-center rounded-md sm:rounded-lg transition-all ${
                     isActive 
                       ? "bg-indigo-600 text-white shadow-lg dark:bg-indigo-500" 
                       : "bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400"
                   }`}>
-                    <Icon className="h-6 w-6" />
+                    <Icon className="h-3 w-3 sm:h-6 sm:w-6" />
                   </div>
-                  <div className="flex flex-col items-center text-center">
-                    <span className={`text-sm font-semibold transition-colors ${
+                  <div className="flex flex-col items-center text-center w-full">
+                    <span className={`text-[9px] sm:text-sm font-semibold transition-colors truncate w-full leading-tight ${
                       isActive 
                         ? "text-indigo-700 dark:text-indigo-300" 
                         : "text-slate-700 dark:text-slate-300"
                     }`}>
                       {tab.label}
                     </span>
-                    <span className={`mt-1 text-xs transition-colors ${
+                    <span className={`hidden sm:block mt-1 text-xs transition-colors leading-tight ${
                       isActive 
                         ? "text-indigo-600 dark:text-indigo-400" 
                         : "text-slate-500 dark:text-slate-400"
@@ -99,7 +99,7 @@ export function PredictionDashboard() {
                     </span>
                   </div>
                   {isActive && (
-                    <div className="absolute -bottom-1 left-1/2 h-1 w-1/2 -translate-x-1/2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                    <div className="absolute -bottom-0.5 left-1/2 h-0.5 sm:h-1 w-1/2 -translate-x-1/2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
                   )}
                 </TabsTrigger>
               );
