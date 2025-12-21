@@ -611,7 +611,7 @@ export function HomePage() {
                 </h4>
               </div>
               <p className="mb-4 text-sm text-slate-700 dark:text-slate-300">
-                Este proyecto fue desarrollado por el grupo 1 del curso de Machine Learning & Big Data de la maestría de Ingeniería de Sistemas con mención en Ingeniería de Sistemas de la Universidad Nacional Mayor de San Marcos.
+                Este proyecto fue desarrollado por el grupo 1 del curso de Machine Learning & Big Data de la maestría de Ingeniería de Sistemas con mención en Ingeniería de Software de la Universidad Nacional Mayor de San Marcos.
               </p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
