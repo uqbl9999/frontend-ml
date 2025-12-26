@@ -87,7 +87,7 @@ export function LandingPage() {
               key={title}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className="group flex items-start gap-3 rounded-2xl border border-white/20 bg-white/10 p-4 text-left transition hover:bg-white/15"
+              className="group flex items-start gap-3 rounded-2xl border border-white/20 bg-white/10 p-4 text-left transition hover:bg-white/15 cursor-pointer"
             >
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/20">
                 <Icon className="h-5 w-5" />
@@ -226,7 +226,7 @@ export function LandingPage() {
                 <p className="text-sm text-slate-700 dark:text-slate-200">{desc}</p>
                 <Link
                   to={link}
-                  className="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-300"
+                  className="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 cursor-pointer"
                 >
                   Ir a la sección
                 </Link>
@@ -284,7 +284,7 @@ export function LandingPage() {
             </p>
             <Link
               to="/tamizajes-imagenes"
-              className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
               Ir a Tamizajes
             </Link>
@@ -301,7 +301,7 @@ export function LandingPage() {
             </p>
             <Link
               to="/tamizajes-imagenes/modelo-info"
-              className="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-slate-200"
+              className="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-slate-200 cursor-pointer"
             >
               Ver información
             </Link>

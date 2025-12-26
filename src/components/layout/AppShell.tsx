@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { PageContainer } from "./PageContainer";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { ScrollToTop } from "./ScrollToTop";
+import { WhatsAppButton } from "./WhatsAppButton";
 
 type AppShellProps = {
   readonly children: ReactNode;
@@ -15,6 +17,8 @@ export function AppShell({ children }: AppShellProps) {
       <Header />
       <PageContainer>{children}</PageContainer>
       <Footer />
+      <ScrollToTop />
+      <WhatsAppButton />
     </div>
   );
 }

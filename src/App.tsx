@@ -1,17 +1,20 @@
 import { AppShell } from "./components/layout/AppShell";
-import { LandingPage } from "./pages/Landing";
+import { HomePage } from "./pages/Home";
+import { PredictionDashboard } from "./pages/Landing";
 import { UIProvider } from "./providers/ui-provider";
 import { Routes, Route } from "react-router-dom";
 import { ImageUploadPage } from "./pages/Tamizajes/ImageUploadPage";
 import { ResultsPage } from "./pages/Tamizajes/ResultsPage";
 import { ModelInfoPage } from "./pages/Tamizajes/ModelInfoPage";
+import { PrivacyPolicyPage } from "./pages/Legal";
 
 function App() {
   return (
     <UIProvider>
       <AppShell>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/app" element={<PredictionDashboard />} />
           <Route path="/tamizajes-imagenes" element={<ImageUploadPage />} />
           <Route
             path="/tamizajes-imagenes/resultados"
@@ -20,6 +23,10 @@ function App() {
           <Route
             path="/tamizajes-imagenes/modelo-info"
             element={<ModelInfoPage />}
+          />
+          <Route
+            path="/politicas-privacidad"
+            element={<PrivacyPolicyPage />}
           />
         </Routes>
       </AppShell>

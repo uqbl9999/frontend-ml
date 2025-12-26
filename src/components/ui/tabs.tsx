@@ -77,7 +77,7 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
         type="button"
         onClick={() => context.onValueChange?.(value)}
         className={cn(
-          "flex flex-1 min-w-[180px] flex-col gap-1 rounded-xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+          "flex flex-1 min-w-[180px] flex-col gap-1 rounded-xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 cursor-pointer",
           isActive
             ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-inner dark:border-indigo-400 dark:bg-indigo-500/10 dark:text-indigo-200"
             : "border-transparent bg-transparent text-slate-600 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-600 dark:text-slate-300 dark:hover:border-indigo-500/40 dark:hover:text-indigo-200",
